@@ -249,12 +249,13 @@ async function loadAvatar(){
   const img = document.getElementById('dc-av-img');
   img.src = defaultAvatar(USER_ID);
   try {
-    const res = await fetch(`https://discordlookup.mesavirep.xyz/v1/user/${USER_ID}`);
+    const res = await fetch(`https://japi.rest/discord/v1/user/${USER_ID}`);
     if(!res.ok) throw 0;
     const d = await res.json();
-    if(d.avatar){
-      const ext = d.avatar.startsWith('a_') ? 'gif' : 'webp';
-      img.src = `${CDN}/avatars/${USER_ID}/${d.avatar}.${ext}?size=128`;
+    const av = d?.data?.avatar;
+    if(av?.id){
+      const ext = av.is_animated ? 'gif' : 'webp';
+      img.src = `${CDN}/avatars/${USER_ID}/${av.id}.${ext}?size=128`;
     }
   } catch(e){}
 }
