@@ -3,53 +3,62 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>The Strongest Battlegrounds • HXH</title>
+<title>NX_ | TSB</title>
 <link rel="icon" href="data:,">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 :root {
-  --bg: #000000;
-  --bg-card: rgba(255, 255, 255, 0.025);
-  --bg-card-hover: rgba(255, 255, 255, 0.05);
+  --bg-abyss: #000000;
+  --bg-void: #000000;
+  --bg-card: #000000;
+  --bg-card-hover: #000000;
   --bg-code: #000000;
   --w: #ffffff;
-  --d85: rgba(255, 255, 255, 0.85);
-  --d65: rgba(255, 255, 255, 0.65);
-  --d40: rgba(255, 255, 255, 0.40);
-  --d20: rgba(255, 255, 255, 0.20);
+  --d90: rgba(255, 255, 255, 0.90);
+  --d75: rgba(255, 255, 255, 0.75);
+  --d50: rgba(255, 255, 255, 0.50);
+  --d30: rgba(255, 255, 255, 0.30);
+  --d15: rgba(255, 255, 255, 0.15);
   --d08: rgba(255, 255, 255, 0.08);
-  --d04: rgba(255, 255, 255, 0.04);
-  --b: rgba(255, 255, 255, 0.10);
-  --bh: rgba(255, 255, 255, 0.25);
+
+  --border-void: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(255, 255, 255, 0.35);
+  --border-acc: rgba(255, 255, 255, 0.18);
+
   --mono: 'JetBrains Mono', 'Consolas', monospace;
   --ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --ck: #ffffff;
-  --cs: rgba(255, 255, 255, 0.82);
+  --cs: rgba(255, 255, 255, 0.85);
   --cu: #ffffff;
   --cf: #ffffff;
-  --cn: rgba(255, 255, 255, 0.90);
-  --cp: rgba(255, 255, 255, 0.50);
+  --cn: rgba(255, 255, 255, 0.85);
+  --cp: rgba(255, 255, 255, 0.55);
   --cc: rgba(255, 255, 255, 0.32);
 
-  --s-online: #22c55e;
-  --s-idle: #eab308;
-  --s-dnd: #ef4444;
-  --s-offline: #71717a;
+  --s-online: #00ff88;
+  --s-idle: #ffbe0b;
+  --s-dnd: #ff3366;
+  --s-offline: #52525b;
 }
 
 html, body {
   min-height: 100vh;
   min-height: 100dvh;
   width: 100%;
-  background: var(--bg);
+  background: #000000;
   color: var(--w);
   font-family: var(--ui);
   overflow-x: hidden;
@@ -57,794 +66,721 @@ html, body {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
 }
-
-* {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+body.gate-locked {
+  overflow: hidden !important;
 }
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.35); }
-
-body::before {
-  content: '';
+/* CLICK GATE */
+#click-gate {
   position: fixed;
   inset: 0;
+  z-index: 100000;
+  background: #000000;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+#click-gate.gate-pass {
+  opacity: 0;
+  pointer-events: none;
+}
+.gate-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.12);
+  animation: gate-breathe 3s ease-in-out infinite;
+  pointer-events: none;
+  transition: width 0.3s, height 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.gate-core-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  animation: gate-dot-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+  transition: width 0.3s, height 0.3s, background 0.3s;
+}
+@keyframes gate-breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); border-color: rgba(255,255,255,0.08); }
+  50% { transform: translate(-50%, -50%) scale(1.15); border-color: rgba(255,255,255,0.2); }
+}
+@keyframes gate-dot-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+.gate-shockwave {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  transform: translate(-50%, -50%) scale(0);
+  animation: gate-shock 0.7s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes gate-shock {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+.gate-spark {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  background: #ffffff;
+  pointer-events: none;
+  animation: gate-spark-fly 0.6s ease-out forwards;
+}
+@keyframes gate-spark-fly {
+  0% { opacity: 1; transform: translate(0, 0); }
+  100% { opacity: 0; }
+}
+.gate-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  transform: translate(-50%, -50%);
+  animation: ripple-expand 0.6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-expand {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 240px; height: 240px; opacity: 0; }
+}
+.gate-dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+  animation: dot-fade 0.8s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes dot-fade {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+}
+
+/* PAGE-WIDE CLICK EFFECT (after gate) */
+.page-ripple {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  transform: translate(-50%, -50%);
+  animation: page-ripple-expand 0.5s ease-out forwards;
+  pointer-events: none;
+  z-index: 99999;
+}
+@keyframes page-ripple-expand {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 120px; height: 120px; opacity: 0; }
+}
+
+#void-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  background-size: 160px;
-  opacity: 0.5;
+  opacity: 0.95;
 }
 
-#pc-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #000;
-  color: var(--w);
-  display: none;
-  align-items: center;
-  justify-content: center;
+::-webkit-scrollbar { width: 0; height: 0; display: none; }
+html { scrollbar-width: none; -ms-overflow-style: none; }
+
+#live-clock {
   text-align: center;
-  padding: 32px;
   font-family: var(--mono);
-}
-#pc-gate.show { display: flex; }
-#pc-gate p {
-  font-size: 12px;
-  letter-spacing: .12em;
-  color: var(--d85);
-  text-transform: uppercase;
-  line-height: 1.8;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.15em;
+  padding: 0 0 8px 0;
+  opacity: 0.75;
 }
 
 #app {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
-  max-width: 1060px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 24px 20px 110px;
+  padding: 40px 24px 120px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  box-sizing: border-box;
 }
 
+/* MINIMAL TITLE HEADER */
 #title {
-  text-align: center;
-  padding: 10px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 #title h1 {
-  font-size: clamp(17px, 3.4vw, 26px);
-  font-weight: 300;
-  letter-spacing: .22em;
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--w);
   text-transform: uppercase;
-  color: #ffffff;
 }
 #title hr {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  width: 36px;
-  margin: 10px auto 0;
+  border-bottom: 1px solid var(--border-void);
+  width: 100%;
 }
 
-#ed {
-  width: 100%;
-  border: 1px solid var(--b);
-  border-radius: 9px;
-  background: var(--bg-code);
-  overflow: hidden;
-  transition: border-color .15s;
-  box-sizing: border-box;
+/* CODE LOADER BOX */
+#loader-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
-#ed:hover { border-color: var(--bh); }
+#ed {
+  background: #000000;
+  border: 1px solid var(--border-void);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,1);
+}
 #ed-top {
-  height: 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px;
-  border-bottom: 1px solid var(--b);
-  background: rgba(255, 255, 255, 0.02);
+  padding: 11px 18px;
+  background: #000000;
+  border-bottom: 1px solid var(--border-void);
 }
 .ed-meta {
   display: flex;
   align-items: center;
   gap: 10px;
   font-family: var(--mono);
-  font-size: 10.5px;
-  color: var(--d40);
-  letter-spacing: .08em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--d75);
 }
 .ed-circle {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25);
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
 }
 #copy-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid var(--b);
-  background: transparent;
-  color: var(--d85);
-  font-family: var(--mono);
-  font-size: 11px;
-  transition: border-color .15s, background .15s, color .15s;
-}
-#copy-btn:hover {
-  border-color: var(--bh);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-#copy-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.8; }
-#copy-toast {
-  position: absolute;
-  top: calc(100% + 7px);
-  right: 0;
-  background: #000;
-  color: #fff;
-  border: 1px solid var(--bh);
-  font-size: 10px;
-  font-family: var(--mono);
-  padding: 3px 9px;
-  border-radius: 4px;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(-3px);
-  transition: opacity .15s, transform .15s;
-  pointer-events: none;
-  z-index: 20;
-}
-#copy-toast.show { opacity: 1; transform: translateY(0); }
-#code-area {
-  padding: 16px 18px;
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 22px;
-  white-space: pre-wrap;
-  word-break: break-all;
-  box-sizing: border-box;
-}
-.sc { color: var(--cc); font-style: italic; }
-.sk { color: var(--ck); font-weight: 500; }
-.ss { color: var(--cs); }
-.su { color: var(--cu); text-decoration: underline; text-underline-offset: 2px; }
-.sf { color: var(--cf); }
-.sn { color: var(--cn); }
-.sp { color: var(--cp); }
-
-#dc {
-  width: 100%;
-  border: 1px solid var(--b);
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.015);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  height: 44px;
-  transition: border-color .15s;
-  box-sizing: border-box;
-}
-#dc:hover { border-color: var(--bh); }
-#dc-av {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-right: 1px solid var(--b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #111;
-  position: relative;
-}
-#dc-av img { width: 100%; height: 100%; object-fit: cover; }
-#status-dot {
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 2px solid #111;
-  background: var(--s-offline);
-}
-#status-dot.idle { background: var(--s-idle); }
-#status-dot.online { background: var(--s-online); }
-#status-dot.dnd { background: var(--s-dnd); }
-#status-dot.offline { background: var(--s-offline); }
-
-#dc-label {
-  font-size: 11px;
-  font-family: var(--mono);
-  color: var(--d85);
-  padding: 0 16px;
-  white-space: nowrap;
-  border-right: 1px solid var(--b);
-  height: 100%;
   display: flex;
   align-items: center;
   gap: 8px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.15s ease;
 }
-#dc-label span.sep { color: var(--d20); }
+#copy-btn:hover {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+#copy-btn svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#copy-toast {
+  position: absolute;
+  top: auto;
+  bottom: -32px;
+  right: 0;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mono);
+  padding: 4px 10px;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,1);
+  z-index: 10;
+}
+#copy-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#code-area {
+  padding: 18px 22px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+  white-space: pre;
+  overflow-x: auto;
+  color: var(--w);
+  background: #000000;
+}
+.sk { color: var(--ck); font-weight: 700; }
+.sf { color: var(--cf); font-weight: 600; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.25); }
+.ss { color: var(--cs); }
+.su { color: var(--cu); }
+.sn { color: var(--cn); }
+.sp { color: var(--cp); }
+.sc { color: var(--cc); font-style: italic; }
+
+/* DISCORD PROFILE BAR */
+#dc {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #000000;
+  border: 1px solid var(--border-void);
+  border-radius: 4px;
+  padding: 12px 18px;
+}
+#dc-av {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-void);
+  overflow: visible;
+  flex-shrink: 0;
+}
+#dc-av-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+#status-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid #000;
+}
+#status-dot.online { background: var(--s-online); box-shadow: 0 0 6px var(--s-online); }
+#status-dot.idle { background: var(--s-idle); box-shadow: 0 0 6px var(--s-idle); }
+#status-dot.dnd { background: var(--s-dnd); box-shadow: 0 0 6px var(--s-dnd); }
+#status-dot.offline { background: var(--s-offline); }
+
+#dc-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--w);
+  letter-spacing: 0.05em;
+}
+#dc-label .sep {
+  color: var(--d30);
+  margin: 0 6px;
+}
 #dc-spacer { flex: 1; }
 #show-profile-btn {
-  height: 100%;
-  padding: 0 16px;
-  border: none;
-  border-left: 1px solid var(--b);
-  background: transparent;
-  font-size: 10.5px;
-  font-family: var(--mono);
-  color: var(--d65);
-  cursor: pointer;
-  transition: color .15s, background .15s;
-  text-decoration: none;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  white-space: nowrap;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border-void);
+  color: var(--d75);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 14px;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.15s ease;
 }
-#show-profile-btn:hover { color: #fff; background: var(--d04); }
-#show-profile-btn svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; }
+#show-profile-btn:hover {
+  border-color: #fff;
+  color: #fff;
+}
+#show-profile-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-#ai-banner {
-  width: 100%;
-  border: 1px solid var(--b);
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.015);
-  padding: 0 16px;
-  min-height: 44px;
+/* TERMINAL ACCESS BANNER (PANEL DOKUMENTACJI) */
+.terminal-toggle-strip {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  box-sizing: border-box;
-  font-family: var(--mono);
-  transition: border-color .15s, background .15s, padding .2s;
+  padding: 14px 20px;
+  background: #000000;
+  border: 1px solid var(--border-void);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
 }
-#ai-banner:hover {
-  border-color: var(--bh);
-  background: rgba(255, 255, 255, 0.025);
+.terminal-toggle-strip:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: #000000;
 }
-#ai-banner.is-open {
-  padding: 12px 16px;
-  height: auto;
-}
-.ai-banner-left {
+.toggle-strip-left {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
-  min-width: 0;
 }
-.ai-badge {
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.ai-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
-}
-.ai-desc {
-  display: none;
-  font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.5;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-#ai-banner.is-open .ai-desc {
-  display: block;
-}
-.toggle-docs-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #ffffff;
-  border-radius: 6px;
+.terminal-cursor {
   font-family: var(--mono);
-  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: all .15s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.toggle-docs-btn:hover {
-  background: #000000;
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.15);
 }
-.toggle-docs-btn.is-active {
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.25);
+.toggle-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-.toggle-docs-btn.is-active:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: #ffffff;
-}
-.toggle-docs-btn svg {
-  width: 12px;
-  height: 12px;
-  stroke: currentColor;
+.toggle-chevron {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+  stroke-width: 2;
   fill: none;
-  stroke-width: 2.2;
-  transition: transform .2s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.toggle-docs-btn.is-active svg {
+.terminal-toggle-strip.is-open .toggle-chevron {
   transform: rotate(180deg);
 }
 
+/* COLLAPSIBLE DOCS CONTAINER */
 #docs-content {
   display: none;
   flex-direction: column;
   gap: 36px;
-  width: 100%;
+  margin-top: 6px;
 }
 #docs-content.is-open {
   display: flex;
-  animation: docsReveal .22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-@keyframes docsReveal {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 680px) {
-  #ai-banner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .toggle-docs-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
+/* FILTER PILLS (CLEAN, NO TEXTBOX) */
 .filter-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 9px 14px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--b);
-  border-radius: 8px;
-  font-family: var(--mono);
-  font-size: 11px;
   flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 16px;
+  padding: 14px 18px;
+  background: #000000;
+  border: 1px solid var(--border-void);
+  border-radius: 4px;
 }
-.search-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
-  font-family: var(--mono);
-  font-size: 11.5px;
-  width: 260px;
-  max-width: 100%;
-}
-.search-input::placeholder { color: var(--d40); }
 .filter-pills {
   display: flex;
+  align-items: center;
   gap: 6px;
   flex-wrap: wrap;
 }
 .pill-btn {
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: 1px solid var(--b);
-  background: transparent;
-  color: var(--d65);
+  background: #000000;
+  border: 1px solid var(--border-void);
+  color: var(--d50);
   font-family: var(--mono);
   font-size: 10.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 2px;
   cursor: pointer;
-  transition: all .12s;
-  white-space: nowrap;
+  transition: all 0.15s ease;
+  letter-spacing: 0.04em;
 }
 .pill-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
   color: #fff;
-  border-color: var(--bh);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 .pill-btn.active {
   background: #ffffff;
   color: #000000;
-  font-weight: 600;
   border-color: #ffffff;
+  font-weight: 700;
 }
 
+/* SECTION STRUCTURE */
 .doc-section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 18px;
 }
 .section-headline {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--b);
   flex-wrap: wrap;
-  gap: 8px;
-  width: 100%;
-  box-sizing: border-box;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-void);
+  padding-bottom: 12px;
 }
 .section-title {
-  font-family: var(--mono);
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.section-num {
+  color: #ffffff;
+  font-weight: 700;
 }
 .section-badge {
   font-family: var(--mono);
-  font-size: 9.5px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  border: 1px solid var(--b);
-  color: var(--d65);
-  white-space: nowrap;
+  font-size: 10px;
+  color: var(--d50);
+  border: 1px solid var(--border-void);
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: #000000;
 }
 
+/* CARDS GRID */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 16px;
-  width: 100%;
-  box-sizing: border-box;
-  align-items: start;
 }
 .doc-card {
-  min-width: 0;
-  max-width: 100%;
-  background: var(--bg-card);
-  border: 1px solid var(--b);
-  border-radius: 8px;
+  background: #000000;
+  border: 1px solid var(--border-void);
+  border-radius: 4px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: border-color .15s, background .15s;
-  box-sizing: border-box;
-  overflow: hidden;
-  height: fit-content;
+  transition: border-color 0.2s ease;
 }
 .doc-card:hover {
-  border-color: var(--bh);
-  background: var(--bg-card-hover);
+  background: #000000;
+  border-color: var(--border-glow);
 }
 .doc-card.full-width {
   grid-column: 1 / -1;
-  width: 100%;
 }
-
 .card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   gap: 8px;
-  flex-wrap: wrap;
 }
-.card-header-tag {
+.card-tag {
   font-family: var(--mono);
   font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: .08em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--d50);
 }
-
+.code-inline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--d75);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
 .card-title {
   font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  word-break: normal;
-  overflow-wrap: break-word;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
 }
 .card-desc {
-  font-size: 12px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.75);
-  word-break: normal;
-  overflow-wrap: break-word;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--d75);
 }
-
 .doc-list {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 100%;
-  padding: 0;
-  margin: 0;
+  margin-top: 4px;
 }
 .doc-list li {
   font-size: 12px;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.5;
+  color: var(--d75);
   position: relative;
-  padding-left: 15px;
-  display: block;
-  word-break: normal;
-  overflow-wrap: break-word;
+  padding-left: 14px;
 }
 .doc-list li::before {
   content: '>';
   position: absolute;
   left: 0;
-  top: 0;
+  color: var(--d30);
   font-family: var(--mono);
-  color: rgba(255, 255, 255, 0.45);
-  font-weight: bold;
+}
+.doc-list strong {
+  color: #fff;
+  font-family: var(--mono);
+  font-weight: 600;
+}
+.doc-list code {
+  font-family: var(--mono);
   font-size: 11px;
-  line-height: 1.65;
-}
-.doc-list li strong {
-  color: #ffffff;
-  font-family: var(--mono);
-  font-size: 11.5px;
-  margin-right: 5px;
-  display: inline;
-}
-.doc-list li span {
-  display: inline;
-}
-.doc-list li code {
-  display: inline-block;
-  padding: 1px 5px;
-  margin: 0 2px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: #ffffff;
-  vertical-align: baseline;
+  padding: 2px 5px;
+  border-radius: 2px;
+  color: #fff;
 }
 
-.hub-rows-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 12px;
-  width: 100%;
-  margin-top: 8px;
-  box-sizing: border-box;
-  align-items: start;
+/* BADGES & KEYBIND STYLING */
+.kb-key {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 2px;
 }
-.hub-row-card {
-  background: rgba(255, 255, 255, 0.02);
-  padding: 14px 16px;
-  border-radius: 6px;
-  border: 1px solid var(--b);
-  min-width: 0;
+.badges-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: fit-content;
+  flex-wrap: wrap;
+  gap: 6px;
 }
-.hub-row-header {
+.badge-tag {
   font-family: var(--mono);
   font-size: 10.5px;
+  background: #000000;
+  border: 1px solid var(--border-void);
+  padding: 4px 8px;
+  border-radius: 2px;
+  color: var(--d75);
+}
+.badge-tag.highlight {
+  border-color: rgba(255, 255, 255, 0.4);
   color: #ffffff;
-  letter-spacing: .08em;
-  font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  padding-bottom: 6px;
-  margin-bottom: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.badge-tag.cyan {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  background: #000000;
+}
+.badge-tag.gold {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+  background: #000000;
+}
+.badge-tag.red {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.75);
+  background: #000000;
 }
 
+/* KEYBINDS TABLE */
 .table-container {
   width: 100%;
-  max-width: 100%;
-  border: 1px solid var(--b);
-  border-radius: 8px;
-  background: var(--d04);
   overflow-x: auto;
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-void);
+  border-radius: 4px;
+  background: #000000;
 }
-table.tech-table {
+.keybind-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
   text-align: left;
-  min-width: 660px;
 }
-table.tech-table th {
-  padding: 11px 14px;
+.keybind-table th {
+  background: #000000;
+  padding: 12px 14px;
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: .08em;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  border-bottom: 1px solid var(--b);
-  background: rgba(255, 255, 255, 0.02);
-  white-space: nowrap;
+  color: var(--d75);
+  border-bottom: 1px solid var(--border-void);
 }
-table.tech-table td {
-  padding: 11px 14px;
+.keybind-table td {
+  padding: 12px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.88);
   vertical-align: top;
-  line-height: 1.6;
-  word-break: normal;
-  overflow-wrap: break-word;
+  line-height: 1.5;
+  color: var(--d75);
 }
-table.tech-table tr:last-child td { border-bottom: none; }
-table.tech-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
-
-.kb-key {
-  display: inline-block;
-  padding: 2px 6px;
+.keybind-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+.keybind-table code {
   font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 11px;
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
-}
-.code-inline {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  padding: 1px 5px;
-  border-radius: 3px;
-  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 2px;
 }
 
-.badges-wrap {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
-}
-.badge-tag {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--d85);
-  white-space: nowrap;
-}
-.badge-tag.highlight {
-  border-color: rgba(255, 255, 255, 0.35);
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.10);
-}
-
-#lang-switcher {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  background: rgba(0, 0, 0, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(16px);
-  padding: 4px 6px;
-  border-radius: 999px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
-  user-select: none;
-}
-.lang-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.45);
-  font-family: var(--mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all .15s ease;
-}
-.lang-btn.active {
-  background: #ffffff;
-  color: #000000;
-}
-.lang-sep {
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 10.5px;
-  font-family: var(--mono);
-}
-
-footer {
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px solid var(--b);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 10.5px;
-  color: var(--d40);
-  flex-wrap: wrap;
-  gap: 12px;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .cards-grid { grid-template-columns: 1fr; }
-  #app { padding: 16px 12px 100px; gap: 18px; }
-  #lang-switcher { bottom: 16px; right: 16px; }
+  #app { padding: 20px 14px 100px; gap: 20px; }
 }
+
 </style>
 </head>
 <body>
 
-<div id="pc-gate">
-  <p>[RESTRICT] DESKTOP/PC ARCHITECTURE ONLY<br><span style="color:var(--d40);font-size:10px;">Window resolution or pointer interface restricted.</span></p>
-</div>
+<div id="click-gate"></div>
 
-<div id="lang-switcher">
-  <button id="btn-lang-pl" class="lang-btn" onclick="setLanguage('pl')">PL</button>
-  <span class="lang-sep">/</span>
-  <button id="btn-lang-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
-</div>
+<template id="app-template">
+<canvas id="void-canvas"></canvas>
 
 <div id="app">
 
+  <div id="live-clock"></div>
+
   <div id="title">
-    <h1>The Strongest Battlegrounds . . .</h1>
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <h1>The Strongest Battlegrounds . . .</h1>
+      <span class="section-badge" data-i18n="doc_ai_badge">DOCUMENTATION MADE BY AI</span>
+    </div>
     <hr>
   </div>
 
-  <section id="loader" style="display:flex; flex-direction:column; gap:12px;">
+  <section id="loader-section">
     <div id="ed">
       <div id="ed-top">
         <div class="ed-meta">
@@ -875,290 +811,419 @@ footer {
       </a>
     </div>
 
-    <div id="ai-banner">
-      <div class="ai-banner-left">
-        <span class="ai-badge"><span class="ai-dot"></span><span data-i18n="ai_badge">MADE BY AI</span></span>
-        <span class="ai-desc" data-i18n="ai_desc">Architektura modułów, dekompilacja ScreenGui, hooki pamięci/pakietów oraz matryca keybindów opracowane przez AI na bazie HXH.lua.</span>
+    <div id="toggle-docs-btn" class="terminal-toggle-strip">
+      <div class="toggle-strip-left">
+        <span class="terminal-cursor">&gt;_</span>
+        <div class="toggle-title" id="toggle-docs-text" data-i18n="toggle_docs">DOCUMENTATION PANEL</div>
       </div>
-      <button id="toggle-docs-btn" class="toggle-docs-btn" type="button" aria-expanded="false">
-        <span id="toggle-docs-icon" class="toggle-icon">
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        </span>
-        <span id="toggle-docs-text" data-i18n="toggle_docs_show">Pokaż dokumentację</span>
-      </button>
+      <svg class="toggle-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </section>
 
   <div id="docs-content">
 
-  <div class="filter-bar">
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="color:#ffffff;">&gt;</span>
-      <input type="text" id="quickSearch" class="search-input" placeholder="Wyszukaj / Search (V, Safe Zone, Walk Fling, hook)...">
+    <div class="filter-bar">
+      <div class="filter-pills">
+        <button class="pill-btn active" data-filter="all">ALL</button>
+        <button class="pill-btn" data-filter="gui">15 HUBS</button>
+        <button class="pill-btn" data-filter="afk">AFK-FK ENGINE</button>
+        <button class="pill-btn" data-filter="kb">KEYBINDS</button>
+        <button class="pill-btn" data-filter="hook">HOOKS &amp; BYPASS</button>
+        <button class="pill-btn" data-filter="fling">CUSTOM TP &amp; FLING</button>
+        <button class="pill-btn" data-filter="block">BLOCKERS &amp; PLACES</button>
+      </div>
     </div>
-    <div class="filter-pills">
-      <button class="pill-btn active" data-filter="all">All</button>
-      <button class="pill-btn" data-filter="gui">GUI &amp; Hubs</button>
-      <button class="pill-btn" data-filter="kb">Keybinds</button>
-      <button class="pill-btn" data-filter="hook">Hooks</button>
-      <button class="pill-btn" data-filter="custom">CustomUI &amp; Fling</button>
-    </div>
-  </div>
 
   <section id="screengui" class="doc-section searchable-item" data-category="gui">
     <div class="section-headline">
       <div class="section-title">
-        <span>[01]</span>
-        <span data-i18n="s1_title">DRZEWO INSTANCJI SCREENGUI &amp; OKNA</span>
+        <span class="section-num">[01]</span>
+        <span data-i18n="s1_title">SCREENGUI INSTANCE TREE & ROOT CORE</span>
       </div>
       <span class="section-badge">ScreenGui: NOTHING_X-000</span>
     </div>
 
     <div class="cards-grid">
-
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">ROOT INSTANCE</span>
+          <span class="card-tag">CORE INSTANCE</span>
           <span class="code-inline">DisplayOrder: 9999999</span>
         </div>
         <div class="card-title">sGui = Instance.new("ScreenGui")</div>
-        <div class="card-desc" data-i18n="s1_sgui_desc">Główny nośnik interfejsu chroniony przed detekcją i usunięciem w trakcie odradzania.</div>
+        <div class="card-desc" data-i18n="s1_sgui_desc">Root UI container protected against detection and garbage collection upon respawn.</div>
         <ul class="doc-list">
           <li><strong>Name:</strong> <code>"NOTHING_X-000"</code></li>
-          <li><strong>ResetOnSpawn:</strong> <code>false</code> <span data-i18n="s1_ros">(GUI nie znika po śmierci gracza)</span></li>
-          <li><strong>IgnoreGuiInset:</strong> <code>true</code> <span data-i18n="s1_igi">(pełny render ekranu z pominięciem paska TopBar)</span></li>
+          <li><strong>ResetOnSpawn:</strong> <code>false</code> <span data-i18n="s1_ros">(GUI persists across player respawn cycles)</span></li>
+          <li><strong>IgnoreGuiInset:</strong> <code>true</code> <span data-i18n="s1_igi">(Full-screen viewport render ignoring Roblox top bar)</span></li>
           <li><strong>ZIndexBehavior:</strong> <code>Enum.ZIndexBehavior.Sibling</code></li>
-          <li><strong>Parent:</strong> <code>gethui()</code> / <code>CoreGui</code> (syn.protect_gui)</li>
+          <li><strong>Parent Engine:</strong> <code>gethui()</code> / <code>CoreGui</code> (syn.protect_gui bypass)</li>
         </ul>
       </div>
 
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">MAIN FRAME</span>
+          <span class="card-tag">VIEWPORT FRAME</span>
           <span class="code-inline">WindowUI</span>
         </div>
         <div class="card-title">WindowUI &amp; WindowOutline</div>
-        <div class="card-desc" data-i18n="s1_win_desc">Centralne okno robocze zawierające wszystkie podległe huby i kontrolki.</div>
+        <div class="card-desc" data-i18n="s1_win_desc">Central viewport container housing all sub-hubs and controls.</div>
         <ul class="doc-list">
-          <li><strong>WindowOutline:</strong> <span data-i18n="s1_wo">Zewnętrzna ramka o zmiennej poświacie.</span></li>
-          <li><strong>WindowAnimScale:</strong> <span data-i18n="s1_was">Moduł skalowania i płynnych animacji otwierania/zamykania okna.</span></li>
-          <li><strong>HeaderDragArea:</strong> <span data-i18n="s1_hda">Obszar przeciągania myszką. Zawiera kontrolki:</span></li>
-          <li><span class="kb-key">_^</span> <code>Minimize</code> — <span data-i18n="s1_min">Zmniejsza okno do miniatury.</span></li>
-          <li><span class="kb-key">-</span> <code>Collapse</code> — <span data-i18n="s1_col">Zwija zawartość okna, zostawiając nagłówek.</span></li>
-          <li><span class="kb-key">UI-x</span> <code>Close</code> — <span data-i18n="s1_clo">Całkowicie ukrywa interfejs graficzny.</span></li>
+          <li><strong>WindowOutline:</strong> <span data-i18n="s1_wo">Outer glow bounding border with adaptive accretion glow.</span></li>
+          <li><strong>WindowAnimScale:</strong> <span data-i18n="s1_was">Tween scaling and smooth collapse controller.</span></li>
+          <li><strong>HeaderDragArea:</strong> <span data-i18n="s1_hda">Mouse drag bounding box containing title bar controls:</span></li>
+          <li><span class="kb-key">_^</span> <code>Minimize</code> — <span data-i18n="s1_min">Shrinks window to a minimal footprint.</span></li>
+          <li><span class="kb-key">-</span> <code>Collapse</code> — <span data-i18n="s1_col">Folds hub content, retaining only the title header.</span></li>
+          <li><span class="kb-key">UI-x</span> <code>Close</code> — <span data-i18n="s1_clo">Completely hides the graphical interface.</span></li>
         </ul>
       </div>
 
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">HUD WIDGETS</span>
-          <span class="code-inline">TargetFrame</span>
+          <span class="card-tag">HUD &amp; TELEMETRY OVERLAYS</span>
+          <span class="code-inline">TargetFrame &bull; InfoBox</span>
         </div>
-        <div class="card-title">TargetFrame &amp; Dropdowns</div>
-        <div class="card-desc" data-i18n="s1_aux_desc">Pływające widgety informacyjne oraz rozwijane listy parametrów.</div>
+        <div class="card-title">TargetFrame, TargetHP &amp; Floating Info</div>
+        <div class="card-desc" data-i18n="s1_aux_desc">Floating status overlay widgets and real-time enemy health indicators.</div>
         <ul class="doc-list">
-          <li><strong>TargetValueText:</strong> <span data-i18n="s1_tvt">Wyświetla Nick wroga i odległość w studs.</span></li>
-          <li><strong>TargetHPText:</strong> <span data-i18n="s1_thp">Live pasek i procent życia przeciwnika.</span></li>
-          <li><strong>DropdownHolder:</strong> <code>DropdownOptionsFrame</code> &bull; <code>DropdownChoiceFrame</code></li>
-          <li><strong>InfoContainer:</strong> <span data-i18n="s1_inf">Pływający dymek podpowiedzi (InfoTitle, InfoText).</span></li>
+          <li><strong>TargetFrame (TVT):</strong> <span data-i18n="s1_tvt">Displays enemy username and distance in studs.</span></li>
+          <li><strong>TargetHP:</strong> <span data-i18n="s1_thp">Live percentage and health bar indicator.</span></li>
+          <li><strong>InfoBox (Floating):</strong> <span data-i18n="s1_inf">Contextual floating notification tooltip for combat parameters.</span></li>
         </ul>
       </div>
-
     </div>
   </section>
 
   <section id="hubs" class="doc-section searchable-item" data-category="gui">
     <div class="section-headline">
       <div class="section-title">
-        <span>[02]</span>
-        <span data-i18n="s2_title">KOMPLETNY ROZPIS HUBÓW UI &amp; TOGGLI</span>
+        <span class="section-num">[02]</span>
+        <span data-i18n="s2_title">15 SYSTEM HUBS & MODULAR SUBSYSTEMS</span>
       </div>
-      <span class="section-badge">DeadHub1 &bull; DeadHub2 &bull; DeadHub3 &bull; BlockHub &bull; AfkHub</span>
+      <span class="section-badge">makeControlFrame &bull; 15 HUBS</span>
     </div>
 
     <div class="cards-grid">
 
-      <div class="doc-card full-width">
-        <div class="card-top">
-          <span class="card-header-tag">HUB 01 • DeadHub1</span>
-          <span class="code-inline">Movement &amp; System</span>
-        </div>
-        <div class="card-title">Movement &amp; System Hub (6 Rows • 18 Toggles)</div>
-        <div class="card-desc" data-i18n="s2_h1_desc">Główny hub zarządzania mobilnością, odradzaniem, zabezpieczeniami i parametrami postaci.</div>
-        
-        <div class="hub-rows-grid">
-          
-          <div class="hub-row-card">
-            <div class="hub-row-header">ROW 1: MOVEMENT CORE</div>
-            <ul class="doc-list">
-              <li><strong>Stay:</strong> <span data-i18n="tog_stay">Zamraża współrzędne w powietrzu/na ziemi (BodyPosition / AlignPosition).</span></li>
-              <li><strong>Dash Block:</strong> <span data-i18n="tog_dashblock">Automatyczny blok podczas dasha (Q + A/S/D).</span></li>
-              <li><strong>Whirlwind:</strong> <span data-i18n="tog_whirlwind">Zmiana wektora rotacji ciała (wirowanie dookoła własnej osi).</span></li>
-              <li><strong>Fix Cam:</strong> <span data-i18n="tog_fixcam">Resetuje pozycję i FOV kamery po cutscenkach.</span></li>
-            </ul>
-          </div>
-
-          <div class="hub-row-card">
-            <div class="hub-row-header">ROW 2: COMBO &amp; DASH</div>
-            <ul class="doc-list">
-              <li><strong>Auto Combo:</strong> <span data-i18n="tog_autocombo">Automatyczne wyprowadzanie ataków na ogłuszonym celu.</span></li>
-              <li><strong>No Dash CD:</strong> <span data-i18n="tog_nodashcd">Obejście cooldownu zrywu (_dashUntil bypass).</span></li>
-              <li><strong>BL Trash:</strong> <span data-i18n="tog_bltrash">Blacklista śmieci/obiektów z mapy przy auto-target.</span></li>
-            </ul>
-          </div>
-
-          <div class="hub-row-card">
-            <div class="hub-row-header">ROW 3: SAFE ZONE &amp; PROTECTION</div>
-            <ul class="doc-list">
-              <li><strong>Safe Zone:</strong> <span data-i18n="tog_safezone">Teleport do podniebnej strefy z opcją Restore Position.</span></li>
-              <li><strong>Safe Zone (HP):</strong> <span data-i18n="tog_safezonehp">Ewakuacja przy niskim HP. Czyta prawdziwe Humanoid.Health (ignorując MagicHealth), auto-wyłącza Fly/Speed.</span></li>
-              <li><strong>HP Target:</strong> <span data-i18n="tog_hptarget">Monitoruje i wyświetla procent życia wybranego celu.</span></li>
-            </ul>
-          </div>
-
-          <div class="hub-row-card">
-            <div class="hub-row-header">ROW 4: COLLISION &amp; NO STUN</div>
-            <ul class="doc-list">
-              <li><strong>Noclip:</strong> <span data-i18n="tog_noclip">Wyłącza kolizje na wszystkich częściach ciała gracza.</span></li>
-              <li><strong>Anti-Fling:</strong> <span data-i18n="tog_antifling">Blokuje nagłe zmiany AssemblyAngularVelocity przed flingiem wrogów.</span></li>
-              <li><strong>?HUH? (No Stun):</strong> <span data-i18n="tog_huh">Kompletny brak stuna / No Stun. Wymusza WalkSpeed (26.50) i Jump (50.50) oraz odcina pakiety spowolnień i ogłuszeń w __namecall.</span></li>
-            </ul>
-          </div>
-
-          <div class="hub-row-card">
-            <div class="hub-row-header">ROW 5: EXPLOIT &amp; DASH MECHANICS</div>
-            <ul class="doc-list">
-              <li><strong>Jump (Emote):</strong> <span data-i18n="tog_jumpemote">Skok NothingXNoStunJump z emote-cancel pozwalający uciec z kombosów.</span></li>
-              <li><strong>DD_ (Accessory Dash):</strong> <span data-i18n="tog_dd">Wykrywa niechciane, zbędne accessories doczepiane do postaci przez grę i natychmiast odpala Dash (Q), zrywając niekorzystny stan.</span></li>
-              <li><strong>Upward:</strong> <span data-i18n="tog_upward">Wstrzyknięcie pionowego wektora prędkości do wysokich skoków.</span></li>
-            </ul>
-          </div>
-
-          <div class="hub-row-card">
-            <div class="hub-row-header">ROW 6: CLEANUP &amp; ANTI-INVIS</div>
-            <ul class="doc-list">
-              <li><strong>FK JERK OFF:</strong> <span data-i18n="tog_fkjerk">Blokada niechcianych pętli animacji.</span></li>
-              <li><strong>Clean:</strong> <span data-i18n="tog_clean">Usuwa zbędne efekty, śmieci i BodyVelocity (_cleanToken).</span></li>
-              <li><strong>Anti Invis:</strong> <span data-i18n="tog_antiinvis">Selektywny filtr: przywraca wyłącznie Torso, Legs, Arms, Head/face, Shirt/Pants oraz Handle akcesoriów.</span></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">HUB 02 • DeadHub2</span>
-          <span class="code-inline">ESP / Billboard</span>
+          <span class="card-tag">HUB 01 &bull; 278PX</span>
+          <span class="code-inline">movementHub</span>
         </div>
-        <div class="card-title">ESP &amp; Billboard HUD</div>
-        <div class="card-desc" data-i18n="s2_esp_desc">Kompletny radar i nakładka informacyjna nad postaciami.</div>
+        <div class="card-title">Movement &amp; System Hub</div>
+        <div class="card-desc" data-i18n="h_mov_desc">Primary mobility, respawn, safety zone, and character state controller.</div>
         <ul class="doc-list">
-          <li><strong>HP %:</strong> <span data-i18n="esp_hp">Pasek i procent punktów życia nad graczem.</span></li>
-          <li><strong>Name (CH):</strong> <span data-i18n="esp_name">Nick i aktualna postać (Saitama, Garou, Genos...).</span></li>
-          <li><strong>ULT %:</strong> <span data-i18n="esp_ult">Wskaźnik naładowania trybu Awakening.</span></li>
-          <li><strong>Streak:</strong> <span data-i18n="esp_streak">Licznik serii zabójstw (Killstreak).</span></li>
-          <li><strong>ULT ESP:</strong> <span data-i18n="esp_ultesp">Wyróżnienie graczy z aktywnym ultem.</span></li>
-          <li><strong>Death Cntr ESP:</strong> <span data-i18n="esp_deathcntresp">Radar gotowości umiejętności wroga (Strong/Weak).</span></li>
-          <li><strong>Ulted Info:</strong> <span data-i18n="esp_ultedinfo">Czas trwania i status aktywnego awakenigu.</span></li>
-          <li><strong>Anti Death Cntr:</strong> <span data-i18n="esp_antideath">Blokada wrogiego wykrywania licznika.</span></li>
-          <li><strong>DEATH (V):</strong> <span data-i18n="esp_deathv">Detektor finisherów Bald Ult (11365563255, 12983333733, 13927612951) z zrzutem do -900 studs.</span></li>
-          <li><strong>BL Animation:</strong> <span data-i18n="esp_blanim">Blacklista wybranych animacji.</span></li>
+          <li><strong>Stay:</strong> <span data-i18n="tog_stay">Freezes world position in mid-air/ground (BodyPosition / AlignPosition).</span></li>
+          <li><strong>Dash Block:</strong> <span data-i18n="tog_dashblock">Auto-activates block during dash execution (Q + A/S/D).</span></li>
+          <li><strong>Whirlwind:</strong> <span data-i18n="tog_whirlwind">Inverts character angular vector (rapid axial spin).</span></li>
+          <li><strong>Fix Cam:</strong> <span data-i18n="tog_fixcam">Recovers camera angle and FOV after broken game cutscenes.</span></li>
+          <li><strong>Auto Combo:</strong> <span data-i18n="tog_autocombo">Chains automated attack combos on stunned enemy targets.</span></li>
+          <li><strong>No Dash CD:</strong> <span data-i18n="tog_nodashcd">Bypasses dash cooldown limitation (_dashUntil bypass).</span></li>
+          <li><strong>Safe Zone &amp; HP:</strong> <span data-i18n="tog_safezonehp">Low-health evacuation reading true Humanoid.Health (ignoring MagicHealth).</span></li>
+          <li><strong>Huh / No Stun:</strong> <span data-i18n="tog_huh">Complete Stun Immunity (No Stun). Enforces WalkSpeed 26.50 and Jump 50.50 while filtering incoming slowdowns in __namecall.</span></li>
+          <li><strong>Anti-Invis &amp; DD:</strong> <span data-i18n="tog_antiinvis">Restores invisible limbs and detects foreign accessories with immediate dash escape.</span></li>
         </ul>
       </div>
 
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">HUB 03 • BlockHub</span>
-          <span class="code-inline">Block...</span>
+          <span class="card-tag">HUB 02 &bull; 68PX</span>
+          <span class="code-inline">fakerPingHub</span>
         </div>
-        <div class="card-title">Auto Block &amp; Parry Engine</div>
-        <div class="card-desc" data-i18n="s2_block_desc">Moduł parowania ciosów i kontrowania serii ataków.</div>
+        <div class="card-title">Faker Ping Subsystem</div>
+        <div class="card-desc" data-i18n="h_fp_desc">Synthetic latency simulation and network packet desynchronization engine.</div>
         <ul class="doc-list">
-          <li><strong>5 Trybów:</strong> <code>Custom</code>, <code>Auto</code>, <code>OP</code> (frame-1 parry), <code>~Auto~</code> (humanizowany), <code>~Auto OP~</code> (anty-feint).</li>
-          <li><strong>Auto Block:</strong> <span data-i18n="blk_autoblock">Główny przełącznik silnika obrony.</span></li>
-          <li><strong>M1 After Block:</strong> <span data-i18n="blk_m1after">Natychmiastowy cios M1 po udanym bloku.</span></li>
-          <li><strong>Auto Counter M1:</strong> <span data-i18n="blk_counter">Detekcja nadchodzącego M1 z histerezą (0 utraty staminy).</span></li>
-          <li><strong>M1 Reset:</strong> <span data-i18n="blk_m1reset">Natychmiastowy reset animacji ciosu.</span></li>
-          <li><strong>Suwaki / Inputs:</strong></li>
-          <li>&bull; <code>Close Range</code> (1-100 studs, domyślnie closeRangeDistance)</li>
-          <li>&bull; <code>Long Range</code> (1-200 studs, domyślnie longRangeDistance)</li>
-          <li>&bull; <code>M1 Reset Timing</code> (0.01 - 1.0s, domyślnie m1ResetTiming)</li>
+          <li><strong>Latency Injection:</strong> <span data-i18n="h_fp_1">Injects synthetic latency to disrupt enemy predictive tracking algorithms.</span></li>
+          <li><strong>Jitter &amp; Desync:</strong> <span data-i18n="h_fp_2">Introduces micro-lag jitter preventing enemy auto-block routines from parrying.</span></li>
         </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 03 &bull; 56PX</span>
+          <span class="code-inline">speedFlyHipHub</span>
+        </div>
+        <div class="card-title">Speed, Fly &amp; HipHeight Hub</div>
+        <div class="card-desc" data-i18n="h_sfh_desc">Precision kinetic movement velocity and character hip height controller with quick-edit input boxes.</div>
+        <ul class="doc-list">
+          <li><strong>Speed Hack (default 5):</strong> <span data-i18n="h_sfh_1">Injects camera-aligned _nxApplySpeed vector without server rollbacks (default 5).</span></li>
+          <li><strong>Smooth Fly (default 5):</strong> <span data-i18n="h_sfh_2">3D directional flight (flySpeed / LinearVelocity) with hover locking and zero drift (default 5).</span></li>
+          <li><strong>HipHeight Override (default 0):</strong> <span data-i18n="h_sfh_3">Manual model height elevation to evade low-sweep attacks (default 0).</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 04 &bull; 130PX</span>
+          <span class="code-inline">powersHub</span>
+        </div>
+        <div class="card-title">Powers / Range Multiplier Hub</div>
+        <div class="card-desc" data-i18n="h_pow_desc">Melee reach extender and collision hitbox multiplier.</div>
+        <ul class="doc-list">
+          <li><strong>Hitbox Expander:</strong> <span data-i18n="h_pow_1">Expands attack collision geometry for M1 strikes and special skills.</span></li>
+          <li><strong>Range Multiplier:</strong> <span data-i18n="h_pow_2">Dynamic scaling of damage registration radius without animation desync.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 05 &bull; 144PX</span>
+          <span class="code-inline">orbitHub &bull; 40 Modes</span>
+        </div>
+        <div class="card-title">Orbit Subsystem</div>
+        <div class="card-desc" data-i18n="h_orb_desc">High-speed circumferential orbiting engine around locked enemy target with 40 implemented modes.</div>
+        <ul class="doc-list">
+          <li><strong>Orbital Trajectory:</strong> <span data-i18n="h_orb_1">Rapid angular velocity rotation at specified radial distance.</span></li>
+          <li><strong>Anti-Target Angle:</strong> <span data-i18n="h_orb_2">Continuous vector variation preventing enemies from landing directional skills.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 06 &bull; 446PX</span>
+          <span class="code-inline">bringWallHub</span>
+        </div>
+        <div class="card-title">Bring X_ &amp; Wall Combo Subsystem</div>
+        <div class="card-desc" data-i18n="h_bw_desc">Wall suction and precise rebound impact angle alignment engine.</div>
+        <ul class="doc-list">
+          <li><strong>Wall Suction (Bring):</strong> <span data-i18n="wc_bring">Draws opponent into optimal wall collision trajectory.</span></li>
+          <li><strong>Auto-Ping EMA:</strong> <span data-i18n="wc_ping">Dynamic ping compensation using EMA latency estimator (_bwAutoPingEma).</span></li>
+          <li><strong>Impact Rotation:</strong> <span data-i18n="wc_rot">Rotation duration and wall impact angle.</span></li>
+          <li><strong>Collision Toggle:</strong> <span data-i18n="wc_blk">Disables character collision overlap during dual combos.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 07 &bull; 170PX</span>
+          <span class="code-inline">blockHub</span>
+        </div>
+        <div class="card-title">Defensive Block &amp; Counter Engine</div>
+        <div class="card-desc" data-i18n="s2_block_desc">Reaction engine for automatic parrying and attack counters in sub-milliseconds.</div>
+        <ul class="doc-list">
+          <li><strong>Auto Block:</strong> <span data-i18n="blk_autoblock">Master toggle for automated defensive block engine.</span></li>
+          <li><strong>M1 Counter:</strong> <span data-i18n="blk_m1after">Fires instant counter M1 punch right after a successful block.</span></li>
+          <li><strong>Zero Stamina Loss:</strong> <span data-i18n="blk_counter">Incoming M1 punch detector with hysteresis (0 stamina consumed).</span></li>
+          <li><strong>M1 Anim Reset:</strong> <span data-i18n="blk_m1reset">Instant punch animation cancellation for accelerated combo chains.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 08 &bull; 56PX</span>
+          <span class="code-inline">sessionControlHub</span>
+        </div>
+        <div class="card-title">Session Control &amp; Auto Cleanup</div>
+        <div class="card-desc" data-i18n="h_sess_desc">Session lifetime tracker, memory stability guard, Rejoin option, and CoreGui trace wiper.</div>
+        <ul class="doc-list">
+          <li><strong>Session Join / Rejoin:</strong> <span data-i18n="h_sess_1">Allows immediate connection to chosen session or reconnecting to same server.</span></li>
+          <li><strong>Auto Delete:</strong> <span data-i18n="h_sess_2">Auto-destroys and unlinks GUI if server memory dump probe is detected.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 09 &bull; 248PX</span>
+          <span class="code-inline">keybindHub</span>
+        </div>
+        <div class="card-title">Keybind System &amp; Dynamic Matrix</div>
+        <div class="card-desc" data-i18n="h_kb_desc">Complete management of 18 keyboard shortcuts, masking, and input interception.</div>
+        <ul class="doc-list">
+          <li><strong>Hide Names:</strong> <span data-i18n="h_kb_1">Hides shortcut UI labels for an uncluttered viewport.</span></li>
+          <li><strong>Dynamic Rebinding:</strong> <span data-i18n="h_kb_2">Dynamic binding to any keyboard or mouse input on the fly.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 10 &bull; 148PX</span>
+          <span class="code-inline">trashHub</span>
+        </div>
+        <div class="card-title">Trash System Hub</div>
+        <div class="card-desc" data-i18n="h_tr_desc">Comprehensive manipulation engine for trash cans, boulders, and interactive physical props.</div>
+        <ul class="doc-list">
+          <li><strong>Speed Return (153):</strong> <span data-i18n="h_tr_1">Configurable object return speed (speed-back = 153).</span></li>
+          <li><strong>Full Preset Ladder:</strong> <span data-i18n="h_tr_2">Trash, Instant, Just Instant, Ultra Instant, Auto Throw, and Skip TrashMan.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 11 &bull; 244PX</span>
+          <span class="code-inline">afkFkHub</span>
+        </div>
+        <div class="card-title">afk-FK Automated Combat Hub</div>
+        <div class="card-desc" data-i18n="h_afk_desc">Fully autonomous bot for player elimination and automated kill farming.</div>
+        <ul class="doc-list">
+          <li><strong>6 Target Modes:</strong> <span data-i18n="h_afk_1">6 Target selection modes: Low HP, Target, Closest, CN-, CN_, Random.</span></li>
+          <li><strong>Universal X% HP Threshold:</strong> <span data-i18n="h_afk_2">Universal X% HP threshold triggering target completion across all modes.</span></li>
+          <li><strong>Safe% (20%) &amp; Range (2000):</strong> <span data-i18n="h_afk_3">Default safety thresholds: Safe 20% and 2000 studs maximum combat radius.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 12 &bull; 58PX</span>
+          <span class="code-inline">tpSysHub</span>
+        </div>
+        <div class="card-title">TP System &amp; Physics Stabilizer</div>
+        <div class="card-desc" data-i18n="h_tp_desc">Advanced CFrame warping with instantaneous momentum vector zeroing.</div>
+        <ul class="doc-list">
+          <li><strong>AssemblyLinearVelocity Zeroing:</strong> <span data-i18n="h_tp_1">Neutralizes centrifugal forces to prevent anti-cheat position rollbacks.</span></li>
+          <li><strong>RootJoint Desync:</strong> <span data-i18n="h_tp_2">Instantaneous coordinate shift without desynchronizing character animations.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 13 &bull; 122PX</span>
+          <span class="code-inline">_voidHub &bull; VOID (NX_)</span>
+        </div>
+        <div class="card-title">VOID (NX_) Abyss Subsystem</div>
+        <div class="card-desc" data-i18n="h_void_desc">Next-gen abyss sub-system featuring adaptive automation and per-TP tuning.</div>
+        <ul class="doc-list">
+          <li><strong>Auto Adapt:</strong> <span data-i18n="h_void_1">Auto toggle automatically calculating safe depth and warp interval.</span></li>
+          <li><strong>Parametry bojowe:</strong> <span data-i18n="h_void_2">Independent per tp (s) and per tp (y -) parameters integrated with Z (-505) and V (-900) binds.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 14 &bull; 64PX</span>
+          <span class="code-inline">_execHub</span>
+        </div>
+        <div class="card-title">Auto Exec Script &amp; RJ Subsystem</div>
+        <div class="card-desc" data-i18n="h_exec_desc">Dual interface for automated script execution and instant server rejoin.</div>
+        <ul class="doc-list">
+          <li><strong>Auto Exec script:</strong> <span data-i18n="h_exec_1">Persistent auto-execution after game server transitions.</span></li>
+          <li><strong>RJ (Rejoin):</strong> <span data-i18n="h_exec_2">Instant server reconnection via TeleportService.</span></li>
+        </ul>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HUB 15 &bull; 170PX + 78PX</span>
+          <span class="code-inline">bodyLockHub &bull; BL Offline</span>
+        </div>
+        <div class="card-title">Body Lock Gyro &amp; Offline Target</div>
+        <div class="card-desc" data-i18n="h_bl_desc">Forces continuous character torso orientation toward opponent with offline targeting support.</div>
+        <ul class="doc-list">
+          <li><strong>Aim Parts &amp; Target Mode:</strong> <span data-i18n="h_bl_1">Lock, Target, Closest, CN, T/Close and Root, Head, Torso, Mouse aim parts.</span></li>
+          <li><strong>BL Offline (78px):</strong> <span data-i18n="h_bl_2">Dedicated offline module allowing input of target Username or UserID outside viewport.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="afkfk" class="doc-section searchable-item" data-category="afk">
+    <div class="section-headline">
+      <div class="section-title">
+        <span class="section-num">[03]</span>
+        <span data-i18n="s3_afk_title">AFK-FK AUTOMATED COMBAT ENGINE & TELEMETRY</span>
+      </div>
+      <span class="section-badge">CORE: afkFkHub &bull; Universal X% Engine</span>
+    </div>
+
+    <div class="cards-grid">
+      <div class="doc-card full-width">
+        <div class="card-top">
+          <span class="card-tag">6 TARGET SELECTION MODES</span>
+          <span class="code-inline">_afkTargetMode</span>
+        </div>
+        <div class="card-title" data-i18n="s3_afk_modes_title">Complete 6 Target Selection Modes Matrix</div>
+        <div class="card-desc" data-i18n="s3_afk_modes_desc">The afk-FK engine features 6 dedicated algorithms for acquiring the next target:</div>
+        <div class="badges-wrap" style="margin-top:8px;">
+          <span class="badge-tag highlight">Low HP</span>
+          <span class="badge-tag highlight">Target (Lock)</span>
+          <span class="badge-tag highlight">Closest</span>
+          <span class="badge-tag cyan">CN- (Behind Combat)</span>
+          <span class="badge-tag cyan">CN_ (Under Cut)</span>
+          <span class="badge-tag gold">Random</span>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">UNIVERSAL X% THRESHOLD</span>
+          <span class="code-inline">_isAfkTargetDone</span>
+        </div>
+        <div class="card-title" data-i18n="s3_afk_x_title">Universal X% Target Health Threshold</div>
+        <div class="card-desc" data-i18n="s3_afk_x_desc">The engine checks if the target's HP dropped below the configured X% (or died). Operates across ALL 6 modes (Low HP, Target, Closest, CN-, CN_, Random) for rapid target cycling.</div>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">SAFETY &amp; BOUNDARIES</span>
+          <span class="code-inline">Safe: 20% &bull; Range: 2000</span>
+        </div>
+        <div class="card-title" data-i18n="s3_afk_safe_title">Safety Thresholds & Default Limits</div>
+        <div class="card-desc" data-i18n="s3_afk_safe_desc">Default Safe Zone threshold set to 20% HP (immediate sky retreat). Default search radius set to 2000 studs to prevent attempting to warp outside map boundaries.</div>
       </div>
 
       <div class="doc-card full-width">
         <div class="card-top">
-          <span class="card-header-tag">HUB 04 • DeadHub3</span>
-          <span class="code-inline">&lt;- DEATH -&gt; &amp; Wall Combo Hub</span>
+          <span class="card-tag">STATUS HEADER TELEMETRY</span>
+          <span class="code-inline">afkCheckLabel &bull; Color3(255, 255, 255)</span>
         </div>
-        <div class="card-title">Death Matrix &amp; Wall Combo Subsystem</div>
-        <div class="card-desc" data-i18n="s2_death_desc">Błyskawiczny reset samobójczy oraz mechanika precyzyjnego pozycjonowania wall combo.</div>
+        <div class="card-title" data-i18n="s3_afk_hdr_title">Status Header (afkCheckLabel)</div>
+        <div class="card-desc" data-i18n="s3_afk_hdr_desc">White title color (Color3.fromRGB(255, 255, 255)). Displays active mode, TP position, distance, and optional X% threshold (e.g. CN-|Behind|4.3s|X14% - Target (82hp) or WAIT_FK).</div>
+      </div>
+    </div>
+  </section>
 
-        <div style="display:flex; flex-direction:column; gap:10px; margin-top:6px; width:100%;">
-          <div style="font-size:12px; color:rgba(255,255,255,0.88);">
-            <strong data-i18n="death_btn_lbl">Główny przycisk &lt;- DEATH -&gt;:</strong> <span data-i18n="death_btn_desc">Błyskawicznie ustawia HumanoidStateType.Dead oraz Health = 0 (natychmiastowy reset).</span>
-          </div>
-          
-          <div style="font-size:12px; color:#ffffff;">
-            <strong data-i18n="death_mat_lbl">Matryca Desync &amp; Backpack Teleportów (12 toggli):</strong>
-          </div>
-          <div class="badges-wrap">
-            <span class="badge-tag highlight">~D~ (Reset All)</span>
-            <span class="badge-tag">D~ (Dead_D_TP_Dmg)</span>
-            <span class="badge-tag">D~X~ (Dead_D_BP_Dmg)</span>
-            <span class="badge-tag">D ~X (Dead_D_TP_Prx)</span>
-            <span class="badge-tag">D~F~ (Dead_F_TP_Dmg)</span>
-            <span class="badge-tag">DF~ (Dead_F_BP_Dmg)</span>
-            <span class="badge-tag">D~XF~ (Dead_F_TP_Prx)</span>
-            <span class="badge-tag">D ~XF (Dead_F_BP_Prx)</span>
-            <span class="badge-tag">D~R (Dead_R_TP_Dmg)</span>
-            <span class="badge-tag">D~R~ (Dead_R_BP_Dmg)</span>
-            <span class="badge-tag">D~XR~ (Dead_R_TP_Prx)</span>
-            <span class="badge-tag">D~XR (Dead_R_BP_Prx)</span>
-          </div>
+  <section id="trashlock" class="doc-section searchable-item" data-category="gui">
+    <div class="section-headline">
+      <div class="section-title">
+        <span class="section-num">[04]</span>
+        <span data-i18n="s4_tr_title">PROP MANIPULATION & BODY LOCK GYRO</span>
+      </div>
+      <span class="section-badge">trashHub &bull; bodyLockHub &bull; BL Offline</span>
+    </div>
 
-          <div style="font-size:12px; color:#ffffff; margin-top:8px;">
-            <strong data-i18n="wall_combo_lbl">Wall Combo &amp; Bring Module:</strong>
-          </div>
-          <ul class="doc-list">
-            <li><strong>Bring X_ / Bring Dual _X:</strong> <span data-i18n="wc_bring">Zasysanie wroga do idealnej pozycji przed ścianą.</span></li>
-            <li><strong>~ Auto ~ / ~ Ping ~:</strong> <span data-i18n="wc_ping">Kompensacja opóźnienia na bazie średniego pingu (_bwAutoPingEma).</span></li>
-            <li><strong>Combo Rot (s) &amp; Combo Angle (-):</strong> <span data-i18n="wc_rot">Czas trwania obrotu oraz kąt uderzenia o ścianę.</span></li>
-            <li><strong>Blocked (Dual):</strong> <span data-i18n="wc_blk">Wyłączenie kolizji ciał w trakcie podwójnego kombosa.</span></li>
-          </ul>
+    <div class="cards-grid">
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">TRASH PROP ENGINE</span>
+          <span class="code-inline">GetTrash_key &bull; LeftCtrl</span>
         </div>
+        <div class="card-title" data-i18n="s4_tr_eng_title">Interactive Prop Manipulation Engine</div>
+        <div class="card-desc" data-i18n="s4_tr_eng_desc">Scans map for trash cans, rocks, and throwable items. Features: Trash, Instant, Just Instant, Ultra Instant, Auto Throw, Skip TrashMan, Low HP, Auto, and Speed Return tuning (153).</div>
       </div>
 
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">BODY LOCK GYRO &amp; OFFLINE</span>
+          <span class="code-inline">NXBodyLockGyro &bull; F1</span>
+        </div>
+        <div class="card-title" data-i18n="s4_bl_eng_title">Torso Orientation Lock & Offline Engine</div>
+        <div class="card-desc" data-i18n="s4_bl_eng_desc">Forces chest facing angle directly toward opponent: Target, Closest, CN, T/Close with aim parts (Root, Head, Torso, Mouse), modifiers (3D Pitch, Smooth, Predict, Invert), delays (0s to 0.20s), and separate BL Offline module for manual target entry.</div>
+      </div>
     </div>
   </section>
 
   <section id="keybinds" class="doc-section searchable-item" data-category="kb">
     <div class="section-headline">
       <div class="section-title">
-        <span>[03]</span>
-        <span data-i18n="s3_title">PEŁNA MATRYCA KLAWISZY &amp; INSTRUKCJA UŻYCIA</span>
+        <span class="section-num">[05]</span>
+        <span data-i18n="s5_kb_title">COMPLETE KEYBINDS MATRIX & OPERATIONAL GUIDE</span>
       </div>
-      <span class="section-badge">KeybindSystemHub &bull; 17 KLAWISZY</span>
+      <span class="section-badge">18 DEFAULT BINDS &bull; REBINDABLE</span>
     </div>
 
-    <div class="card-desc" style="margin-bottom:6px;" data-i18n="s3_desc">
-      Panel KeybindFrame w KeybindSystemHub pozwala na dynamiczne bindowanie, ukrywanie (hide) oraz blokowanie (block) każdego skrótu. Poniżej znajduje się kompletny wykaz domyślnych klawiszy i instrukcja użycia.
-    </div>
+    <div class="card-desc" style="margin-bottom:12px;" data-i18n="s5_kb_desc">Every shortcut in HXH.lua is fully remappable via KeybindFrame. Below is the complete reference table of 18 default keybinds, internal code identifiers, and step-by-step instructions.</div>
 
     <div class="table-container">
-      <table class="tech-table">
+      <table class="keybind-table">
         <thead>
           <tr>
-            <th data-i18n="th_key">Klawisz</th>
-            <th data-i18n="th_name">Nazwa w Kodzie</th>
-            <th data-i18n="th_func">Zmienna &amp; Funkcja</th>
-            <th data-i18n="th_what">Co Dokładnie Robi</th>
-            <th data-i18n="th_how">Jak Używać (Krok po Kroku)</th>
+            <th data-i18n="th_key">Keybind</th>
+            <th data-i18n="th_name">Identifier</th>
+            <th data-i18n="th_func">Internal Handler</th>
+            <th data-i18n="th_what">Technical Functionality</th>
+            <th data-i18n="th_how">How to Use (Step-by-Step)</th>
           </tr>
         </thead>
         <tbody id="keybinds-body">
-          
+
         </tbody>
       </table>
     </div>
@@ -1167,163 +1232,168 @@ footer {
   <section id="hooks" class="doc-section searchable-item" data-category="hook">
     <div class="section-headline">
       <div class="section-title">
-        <span>[04]</span>
-        <span data-i18n="s4_title">INTERNAL HOOKS &amp; ARCHITEKTURA BYPASSÓW</span>
+        <span class="section-num">[06]</span>
+        <span data-i18n="s6_hook_title">METAMETHOD HOOKS & INTERNAL BYPASS ARCHITECTURE</span>
       </div>
-      <span class="section-badge">METATABLES &amp; PACKET ENGINE</span>
+      <span class="section-badge">HOOK: __namecall &bull; __index &bull; Anti-Kick</span>
     </div>
 
     <div class="cards-grid">
-
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">NETWORK METAMETHOD</span>
-          <span class="code-inline">__namecall &bull; FireServer</span>
+          <span class="card-tag">METAMETHOD HOOK</span>
+          <span class="code-inline">__namecall</span>
         </div>
-        <div class="card-title">__namecall Remote Packet Interceptor</div>
-        <div class="card-desc" data-i18n="s4_namecall_desc">Główny filtr pakietów wychodzących z klienta do serwera gry.</div>
+        <div class="card-title">Packet Interception &amp; Desync Filter</div>
+        <div class="card-desc" data-i18n="s6_nc_desc">Primary packet filtering metamethod hook between client and server.</div>
         <ul class="doc-list">
-          <li><strong>Ochrona desyncu:</strong> <span data-i18n="s4_desync">Blokuje niechciane potwierdzenia pozycji w stanie _huhOnState.</span></li>
-          <li><strong>Faker Ping:</strong> <span data-i18n="s4_fake_ping">Wstrzykuje sztuczny ping do pakietów walki, dezorientując wrogie predykcje.</span></li>
-          <li><strong>Remote Blocker:</strong> <span data-i18n="s4_rem_blk">Blokuje wywołania powodujące glitchowanie postaci gracza.</span></li>
+          <li><strong>Stun Packet Suppression:</strong> <span data-i18n="s6_nc_1">Filters slowdown and ragdoll packets while in active _huhOnState.</span></li>
+          <li><strong>Remote Event Blocker:</strong> <span data-i18n="s6_nc_2">Intercepts hostile remote events causing character glitching.</span></li>
+          <li><strong>Faker Ping Injection:</strong> <span data-i18n="s6_nc_3">Injects synthetic delay into M1 packets to disrupt opponent parry timing.</span></li>
         </ul>
       </div>
 
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">MEMORY METAMETHOD</span>
-          <span class="code-inline">__index &bull; Health Spoof</span>
+          <span class="card-tag">METAMETHOD HOOK</span>
+          <span class="code-inline">__index &bull; Y &lt; -400</span>
         </div>
-        <div class="card-title">__index Void Boundary Health Spoof</div>
-        <div class="card-desc" data-i18n="s4_index_desc">Obejście wbudowanego limitu zabójczej próżni w silniku Roblox (Kill Boundary Bypass).</div>
+        <div class="card-title">Roblox Kill Boundary Void Bypass</div>
+        <div class="card-desc" data-i18n="s6_idx_desc">Roblox engine kill-boundary bypass for sub-surface coordinates (FallenPartsDestroyHeight).</div>
         <ul class="doc-list">
-          <li><strong>Ochrona w Void:</strong> <span data-i18n="s4_void_hp">Gdy Y &lt; -400 (Void Z na -505 lub V na -900), odczyt HP zwraca 100.</span></li>
-          <li><strong>Skutek:</strong> <span data-i18n="s4_void_res">Silnik gry nie rejestruje śmierci od przekroczenia limitu próżni.</span></li>
-          <li><strong>Stabilność:</strong> <span data-i18n="s4_void_stab">Pozwala na nieograniczone przebywanie na stałej głębokości bez desyncu kamery.</span></li>
+          <li><strong>Spoofed Health:</strong> <span data-i18n="s6_idx_1">When Y < -400 (Void Z at -505 or V at -900), Humanoid.Health reads as 100.</span></li>
+          <li><strong>Void Immortality:</strong> <span data-i18n="s6_idx_2">Game engine will not register void death, allowing indefinite sub-map presence without camera desync.</span></li>
         </ul>
       </div>
 
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">ANIMATION TRACKER</span>
-          <span class="code-inline">hookLXAnimator &bull; NoTP Bypass</span>
+          <span class="card-tag">ANTI-STUN STATE MACHINE</span>
+          <span class="code-inline">_huhOnState &bull; _huhCfStop</span>
         </div>
-        <div class="card-title">Animation Tracker &amp; NoTP Bypass</div>
-        <div class="card-desc" data-i18n="s4_anim_desc">Śledzenie niebezpiecznych animacji finisherów oraz zapobieganie cofkom serwera.</div>
+        <div class="card-title">No Stun &amp; Speed Enforcer</div>
+        <div class="card-desc" data-i18n="s6_huh_desc">Unconditional protection against hitstun and character control loss.</div>
         <ul class="doc-list">
-          <li><strong>hookLXAnimator:</strong> <span data-i18n="s4_anim_mon">Monitoruje sygnatury ID animacji finisherów Saitama Ult (11365563255, 12983333733, 13927612951).</span></li>
-          <li><strong>_isNoTpBypassActive:</strong> <span data-i18n="s4_notp">Zeruje wektor prędkości (AssemblyLinearVelocity = Vector3.zero), zapobiegając cofnięciu gracza przez antycheat.</span></li>
-          <li><strong>Zwolnienie SafeZone:</strong> <code>isSafeZoneActive()</code> <span data-i18n="s4_sz_ex">jest wyłączone z restrykcji NoTP, gwarantując 100% udaną ewakuację.</span></li>
+          <li><strong>WalkSpeed &amp; Jump:</strong> <span data-i18n="s6_huh_1">Enforces WalkSpeed = 26.50 and JumpPower = 50.50 on every Heartbeat frame.</span></li>
+          <li><strong>State Recovery:</strong> <span data-i18n="s6_huh_2">Automatically recovers HumanoidStateType.Running, ignoring knockdown animations.</span></li>
         </ul>
       </div>
 
       <div class="doc-card">
         <div class="card-top">
-          <span class="card-header-tag">CACHE ARCHITECTURE</span>
-          <span class="code-inline">NX_Players_check_list</span>
+          <span class="card-tag">ANTI-KICK REJOIN ENGINE</span>
+          <span class="code-inline">Anti.rejoinEnabled &bull; Delay: 3s</span>
         </div>
-        <div class="card-title">NX Zero-Lag Player Caching Engine</div>
-        <div class="card-desc" data-i18n="s4_nx_desc">Architektura eliminująca spadki klatek (0ms Garbage Collection stutter).</div>
+        <div class="card-title">Automated Rejoin &amp; Ancestry Shield</div>
+        <div class="card-desc" data-i18n="s6_rj_desc">Autonomous defense mechanism against server anti-cheat or moderator kicks.</div>
         <ul class="doc-list">
-          <li><strong>Zdarzeniowy rejestr graczy:</strong> <span data-i18n="s4_nx_reg">Zamiast obciążającego workspace:GetChildren(), skrypt korzysta z globalnej tabeli _G.NX_Players_check_list.</span></li>
-          <li><strong>_NX_char Cache:</strong> <span data-i18n="s4_nx_char">Bezpośrednie wskaźniki do HRP i Humanoida, aktualizowane tylko na CharacterAdded i CharacterRemoving.</span></li>
-          <li><strong>Czysty GC:</strong> <span data-i18n="s4_nx_gc">Brak tworzenia tymczasowych tabel w pętli Heartbeat &rarr; zero stutteru FPS.</span></li>
+          <li><strong>Hook Kick Method:</strong> <span data-i18n="s6_rj_1">Replaces lp.Kick with an empty function preventing instantaneous client disconnection.</span></li>
+          <li><strong>3-Second Auto Rejoin:</strong> <span data-i18n="s6_rj_2">Automatically re-establishes connection via TeleportService if removed from player hierarchy.</span></li>
         </ul>
       </div>
-
     </div>
   </section>
 
-  <section id="customui" class="doc-section searchable-item" data-category="custom">
+  <section id="blockers" class="doc-section searchable-item" data-category="block">
     <div class="section-headline">
       <div class="section-title">
-        <span>[05]</span>
-        <span data-i18n="s5_title">CUSTOMUI — 28 TRYBÓW TELEPORTACJI &amp; OFFSETY</span>
+        <span class="section-num">[07]</span>
+        <span data-i18n="s7_blk_title">COMBAT ANIMATION BLOCKERS, AUTO EMOTE & PLACES TP</span>
       </div>
-      <span class="section-badge">getTPModeCleanItems &bull; 25 SLOTS</span>
+      <span class="section-badge">HIT-ID &bull; BALD ULT &bull; AUTO EMOTE &bull; PLACES</span>
     </div>
 
     <div class="cards-grid">
-      
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">HIT-ID ANIMATION BLOCKER</span>
+          <span class="code-inline">_G.Hit_ID_Enabled</span>
+        </div>
+        <div class="card-title" data-i18n="s7_hit_title">Strike & Stagger Animation Blocker</div>
+        <div class="card-desc" data-i18n="s7_hit_desc">Real-time scanner intercepting opponent strike, stagger, and knockback animations. Instantly cancels incoming animation tracks, preventing opponents from chaining inescapable stunlock loops in close-quarters melee.</div>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">BALD ULT BLOCKER</span>
+          <span class="code-inline">_G.Bald_ULT_ID_Enabled</span>
+        </div>
+        <div class="card-title" data-i18n="s7_ult_title">Bald Ult & Saitama Finisher Blocker</div>
+        <div class="card-desc" data-i18n="s7_ult_desc">Automated monitor detecting Saitama ultimate finishers (Serious Punch, Omni-Directional Punch, Death Counter) and special skills. Identifies hazardous animation tracks within fractions of a second, stopping them to shield against instant elimination.</div>
+      </div>
+
+      <div class="doc-card">
+        <div class="card-top">
+          <span class="card-tag">AUTO EMOTE SYSTEM</span>
+          <span class="code-inline">_G.AutoEmoteEnabled</span>
+        </div>
+        <div class="card-title" data-i18n="s7_emote_title">Smart Auto-Emote Engine with M1 Auto-Pause</div>
+        <div class="card-desc" data-i18n="s7_emote_desc">Background loop continually playing the player's last active emote. Features an intelligent event filter: upon pressing Left Click (M1 strike), the emote instantly pauses for 0.8 seconds, ensuring 100% attack responsiveness with zero combo stutter.</div>
+      </div>
+
       <div class="doc-card full-width">
         <div class="card-top">
-          <span class="card-header-tag">TELEPORT MODES MATRIX</span>
-          <span class="code-inline">CustomUI &bull; tpModesDropdown</span>
+          <span class="card-tag">PLACES TELEPORT MATRIX</span>
+          <span class="code-inline">~ (Tilde) &bull; resolvePlaceCF</span>
         </div>
-        <div class="card-title" data-i18n="s5_modes_title">28 Trybów Pozycjonowania Względem Przeciwnika</div>
-        <div class="card-desc" data-i18n="s5_modes_desc">Pełna lista zaimplementowanych trybów pozycji w rozwijanym menu CustomUI (getTPModeCleanItems):</div>
-        
+        <div class="card-title" data-i18n="s7_places_title">Landmark Coordinates Teleport Matrix</div>
+        <div class="card-desc" data-i18n="s7_places_desc">Instant warp coordinates bound to ~ (Tilde) keybind:</div>
         <div class="badges-wrap" style="margin-top:8px;">
-          <span class="badge-tag highlight">Above</span>
-          <span class="badge-tag highlight">Under</span>
-          <span class="badge-tag highlight">Behind</span>
-          <span class="badge-tag highlight">Behind Custom</span>
-          <span class="badge-tag">Front</span>
-          <span class="badge-tag">Left</span>
-          <span class="badge-tag">Right</span>
-          <span class="badge-tag">Head</span>
-          <span class="badge-tag">Feet</span>
-          <span class="badge-tag">Middle</span>
-          <span class="badge-tag highlight">Aggressive</span>
-          <span class="badge-tag">Auto</span>
-          <span class="badge-tag">Auto Custom</span>
-          <span class="badge-tag">Predict</span>
-          <span class="badge-tag">Look</span>
-          <span class="badge-tag">Random</span>
-          <span class="badge-tag">BackShot</span>
-          <span class="badge-tag">FaceHug</span>
-          <span class="badge-tag">Belly</span>
-          <span class="badge-tag">SkyDrop</span>
-          <span class="badge-tag">Stomp</span>
-          <span class="badge-tag">FloorClip</span>
-          <span class="badge-tag">HugLeft</span>
-          <span class="badge-tag">HugRight</span>
-          <span class="badge-tag">BackHigh</span>
-          <span class="badge-tag">FrontLow</span>
-          <span class="badge-tag">AntiLook</span>
-          <span class="badge-tag">SpinSide</span>
-          <span class="badge-tag">Troll</span>
-          <span class="badge-tag">Diagonal</span>
+          <span class="badge-tag highlight">Middle Of Map</span>
+          <span class="badge-tag highlight">Prison</span>
+          <span class="badge-tag highlight">Mountain 1</span>
+          <span class="badge-tag highlight">Mountain 2</span>
+          <span class="badge-tag">Circus TOP</span>
+          <span class="badge-tag">Circus DOWN</span>
+          <span class="badge-tag">CircusLB</span>
+          <span class="badge-tag">Counter</span>
+          <span class="badge-tag cyan">Atomic Base</span>
+          <span class="badge-tag red">VOID-</span>
         </div>
-
-        <div style="font-size:12px; color:#ffffff; margin-top:14px;">
-          <strong data-i18n="s5_inputs_title">Precyzyjne Pola Wprowadzania Wartości Wektorowych:</strong>
-        </div>
-        <ul class="doc-list">
-          <li><strong>Offsety 3D (createOffsetInput):</strong> <code>X (0.7)</code>, <code>Y (0.375)</code>, <code>Z (0.05)</code> — <span data-i18n="s5_off">manualne pozycjonowanie w studs.</span></li>
-          <li><strong>Rotacje Kątowe (createRotationInput):</strong> <code>RX (0.7)</code>, <code>RY (0.375)</code>, <code>RZ (0.05)</code> — <span data-i18n="s5_rot">kąt patrzenia postaci.</span></li>
-          <li><strong>Pojedyncze Przyciski (makeCustomSingleBox):</strong> <code>Left</code>, <code>Right</code>, <code>Up</code>, <code>Down</code>, <code>Front</code>, <code>Back</code>, <code>Speed</code>.</li>
-          <li><strong>25 Zapisanych Slotów (makePresetRow):</strong> <span data-i18n="s5_slots">Lewy klik = wczytanie slotu &bull; Prawy klik = zapisanie bieżącej konfiguracji.</span></li>
-        </ul>
       </div>
-
     </div>
   </section>
 
-  <section id="walkfling" class="doc-section searchable-item" data-category="custom">
+  <section id="customfling" class="doc-section searchable-item" data-category="fling">
     <div class="section-headline">
       <div class="section-title">
-        <span>[06]</span>
-        <span data-i18n="s6_title">WALK FLING — 44 TRAJEKTORIE WYRZUTU</span>
+        <span class="section-num">[08]</span>
+        <span data-i18n="s8_fl_title">CUSTOMUI 30 TP MODES, 40 ORBIT & 90 WALK FLING TRAJECTORIES</span>
       </div>
-      <span class="section-badge">11 WIERSZY &bull; makeWFTog</span>
+      <span class="section-badge">45,000 KINETIC POWER &bull; 90 FLING &bull; 40 ORBIT</span>
     </div>
 
     <div class="cards-grid">
-      
       <div class="doc-card full-width">
         <div class="card-top">
-          <span class="card-header-tag">FLING VECTOR DYNAMICS</span>
-          <span class="code-inline">walkFlingBodyMode &bull; 45,000 Power</span>
+          <span class="card-tag">DYNAMIC TARGET RELATIVE POSITIONING</span>
+          <span class="code-inline">getTPModeCleanItems &bull; 30 MODES</span>
         </div>
-        <div class="card-title" data-i18n="s6_wf_title">Pełna Matryca 44 Trybów Wyrzucania Przeciwnika</div>
-        <div class="card-desc" data-i18n="s6_wf_desc">Zaimplementowane w kodzie HXH.lua wiersze kierunków uderzenia siłą kinetyczną (makeWFTog):</div>
+        <div class="card-title" data-i18n="s8_tp_title">30 Dynamic Opponent Placement Modes</div>
+        <div class="card-desc" data-i18n="s8_tp_desc">Complete list of positioning presets in CustomUI (stud offsets and Euler angles): Behind, Behind Custom, Front, Left, Right, Above, Under, Head, Feet, Middle, Aggressive, Auto, Auto Custom, Predict, Look, Random, BackShot, Cross, Shadow, SideStep, BlindSpot, CounterAngle, Flank, OrbitShot, Intercept, Phantom, Grounded, CornerCut, BreachPoint, Wraith. Presets: Left Click = Load | Right Click = Save.</div>
+      </div>
 
+      <div class="doc-card full-width">
+        <div class="card-top">
+          <span class="card-tag">ORBIT TRAJECTORY MATRIX</span>
+          <span class="code-inline">getOrbitModeCleanItems &bull; 40 MODES</span>
+        </div>
+        <div class="card-title" data-i18n="s8_orb_modes_title">40 Orbiting Trajectories Around Target</div>
+        <div class="card-desc" data-i18n="s8_orb_modes_desc">Implemented advanced orbital trajectories: Horizontal, Vertical, Both, Random, Spiral, Figure8, Bounce, Wave, Heart, Zigzag, Helix, Pendulum, Mosquito, Tornado, Drunk, Square, BackShot, FaceHug, UFO, YoYo, Snake, Bees, Star, Infinity, Sidehop, Ceiling, Potato, Rainbow, Corkscrew, Diamond, Pulse, Bloom, Warp, Hexagon, Chaos, Magnet, Ribbon, Coil, Saw, Swoop.</div>
+      </div>
+
+      <div class="doc-card full-width">
+        <div class="card-top">
+          <span class="card-tag">KINETIC FLING DYNAMICS</span>
+          <span class="code-inline">AssemblyAngularVelocity &bull; 45,000 Power &bull; 90 VARIANTS</span>
+        </div>
+        <div class="card-title" data-i18n="s8_wf_title">Full 90 Fling Trajectory Modes Matrix</div>
+        <div class="card-desc" data-i18n="s8_wf_desc">Directional kinetic impulse vectors implemented in HXH.lua with base, C-Target, and CN-Target variants:</div>
         <div class="badges-wrap" style="margin-top:8px;">
           <span class="badge-tag highlight">Body</span>
           <span class="badge-tag highlight">Camera</span>
           <span class="badge-tag highlight">C+B</span>
-          <span class="badge-tag highlight">T-Target</span>
+          <span class="badge-tag cyan">Target</span>
           <span class="badge-tag">Away</span>
           <span class="badge-tag">Predict</span>
           <span class="badge-tag">Velocity</span>
@@ -1336,10 +1406,10 @@ footer {
           <span class="badge-tag">Mouse</span>
           <span class="badge-tag">Random</span>
           <span class="badge-tag">Up</span>
-          <span class="badge-tag highlight">BackShot</span>
-          <span class="badge-tag highlight">FaceHug</span>
-          <span class="badge-tag highlight">Kiss</span>
-          <span class="badge-tag highlight">Yeet</span>
+          <span class="badge-tag red">BackShot</span>
+          <span class="badge-tag red">FaceHug</span>
+          <span class="badge-tag red">Kiss</span>
+          <span class="badge-tag red">Yeet</span>
           <span class="badge-tag">Spin</span>
           <span class="badge-tag">Spaghetti</span>
           <span class="badge-tag">Sky</span>
@@ -1347,7 +1417,7 @@ footer {
           <span class="badge-tag">SideYeet</span>
           <span class="badge-tag">Boomerang</span>
           <span class="badge-tag">Troll</span>
-          <span class="badge-tag highlight">~auto-target</span>
+          <span class="badge-tag gold">Auto-Target</span>
           <span class="badge-tag">Vacuum</span>
           <span class="badge-tag">Pin</span>
           <span class="badge-tag">Cork</span>
@@ -1364,34 +1434,376 @@ footer {
           <span class="badge-tag">Hook</span>
           <span class="badge-tag">Snap</span>
           <span class="badge-tag">Launch</span>
+          <span class="badge-tag highlight">C-Target</span>
+          <span class="badge-tag highlight">CN-Target</span>
+          <span class="badge-tag">C-Predict</span>
+          <span class="badge-tag">CN-Predict</span>
+          <span class="badge-tag">C-Behind</span>
+          <span class="badge-tag">CN-Behind</span>
+          <span class="badge-tag">C-Orbit</span>
+          <span class="badge-tag">CN-Orbit</span>
+          <span class="badge-tag">C-Away</span>
+          <span class="badge-tag">CN-Away</span>
+          <span class="badge-tag">C-Slam</span>
+          <span class="badge-tag">CN-Slam</span>
+          <span class="badge-tag">C-Head</span>
+          <span class="badge-tag">CN-Head</span>
+          <span class="badge-tag">C-Under</span>
+          <span class="badge-tag">CN-Under</span>
+          <span class="badge-tag">C-Up</span>
+          <span class="badge-tag">CN-Up</span>
+          <span class="badge-tag">C-Sky</span>
+          <span class="badge-tag">CN-Sky</span>
+          <span class="badge-tag">C-Switch</span>
+          <span class="badge-tag">CN-Switch</span>
+          <span class="badge-tag">C-Spiral</span>
+          <span class="badge-tag">CN-Spiral</span>
+          <span class="badge-tag">C-Intercept</span>
+          <span class="badge-tag">CN-Intercept</span>
+          <span class="badge-tag">C-Bounce</span>
+          <span class="badge-tag">CN-Bounce</span>
+          <span class="badge-tag">C-Magnet</span>
+          <span class="badge-tag">CN-Magnet</span>
+          <span class="badge-tag">C-Yeet</span>
+          <span class="badge-tag">CN-Yeet</span>
+          <span class="badge-tag">C-SideYeet</span>
+          <span class="badge-tag">CN-SideYeet</span>
+          <span class="badge-tag">C-FaceHug</span>
+          <span class="badge-tag">CN-FaceHug</span>
+          <span class="badge-tag">C-Velocity</span>
+          <span class="badge-tag">CN-Velocity</span>
+          <span class="badge-tag">C-Strafe</span>
+          <span class="badge-tag">CN-Strafe</span>
+          <span class="badge-tag">C-Kiss</span>
+          <span class="badge-tag">CN-Kiss</span>
+          <span class="badge-tag">C-Spin</span>
+          <span class="badge-tag">CN-Spin</span>
+          <span class="badge-tag">C-Vacuum</span>
+          <span class="badge-tag">CN-Vacuum</span>
         </div>
       </div>
-
     </div>
   </section>
 
   </div>
 
-  <footer>
-    <div>NOTHING_X &bull; HXH.lua &bull; The Strongest Battlegrounds</div>
-  </footer>
-
 </div>
+</template>
 
 <script>
-(function(){
-  const ua = navigator.userAgent || '';
-  const isMobileUA = /Android|iPhone|iPad|iPod|Mobile|Windows Phone|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-  const isCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-  const isNarrow = Math.min(window.innerWidth, window.innerHeight) < 600;
-  const isTouchOnly = isCoarsePointer && !window.matchMedia('(pointer: fine)').matches;
 
-  if (isMobileUA || (isTouchOnly && isNarrow)){
-    document.getElementById('pc-gate').classList.add('show');
-    document.getElementById('app').style.display = 'none';
-    document.documentElement.dataset.pcOnly = 'blocked';
-  }
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+document.addEventListener('selectstart', function(e){ e.preventDefault(); });
+document.addEventListener('copy', function(e){ e.preventDefault(); });
+document.addEventListener('cut', function(e){ e.preventDefault(); });
+document.addEventListener('dragstart', function(e){ e.preventDefault(); });
+
+(function(){
+  document.addEventListener('mousedown', function(e){
+    if(e.button !== 0) return;
+    if(document.getElementById('click-gate') && document.getElementById('click-gate').style.display !== 'none') return;
+
+    var ripple = document.createElement('div');
+    ripple.className = 'page-ripple';
+    ripple.style.left = e.clientX + 'px';
+    ripple.style.top = e.clientY + 'px';
+    document.body.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 550);
+  });
 })();
+
+(function(){
+  var gate = document.getElementById('click-gate');
+  if(!gate) return;
+
+  document.body.classList.add('gate-locked');
+
+  var core = document.createElement('div');
+  core.className = 'gate-core';
+  gate.appendChild(core);
+  var coreInner = document.createElement('div');
+  coreInner.className = 'gate-core-inner';
+  core.appendChild(coreInner);
+
+  var clicks = [];
+  var REQUIRED = 3;
+  var MIN_CPS = 3.7;
+  var passed = false;
+  var tamperCount = 0;
+  var MAX_TAMPER = 3;
+  var destroyed = false;
+  var totalClicks = 0;
+
+  function createGateElement(){
+    var g = document.createElement('div');
+    g.id = 'click-gate';
+    g.style.cssText = 'position:fixed;inset:0;z-index:100000;background:#000000;cursor:pointer;user-select:none;-webkit-user-select:none;overflow:hidden;';
+    var c = document.createElement('div');
+    c.className = 'gate-core';
+    var ci = document.createElement('div');
+    ci.className = 'gate-core-inner';
+    c.appendChild(ci);
+    g.appendChild(c);
+    return g;
+  }
+
+  function nukeEverything(){
+    destroyed = true;
+    try { document.title = 'NX'; } catch(e){}
+    document.body.innerHTML = '';
+    document.body.style.cssText = 'margin:0;padding:0;background:#000000;overflow:hidden;';
+    document.documentElement.style.cssText = 'background:#000000;overflow:hidden;';
+    alert('NX');
+    document.body.innerHTML = '';
+    document.body.style.background = '#000000';
+  }
+
+  function attachGateListeners(gateEl){
+    gateEl.addEventListener('mousedown', function(e){
+      if(e.button !== 0) return;
+      if(passed || destroyed) return;
+
+      var ripple = document.createElement('div');
+      ripple.className = 'gate-ripple';
+      ripple.style.left = e.clientX + 'px';
+      ripple.style.top = e.clientY + 'px';
+      gateEl.appendChild(ripple);
+      setTimeout(function(){ ripple.remove(); }, 650);
+
+      for(var i = 0; i < 6; i++){
+        var dot = document.createElement('div');
+        dot.className = 'gate-dot';
+        var angle = Math.random() * Math.PI * 2;
+        var dist = 20 + Math.random() * 50;
+        dot.style.left = (e.clientX + Math.cos(angle) * dist) + 'px';
+        dot.style.top = (e.clientY + Math.sin(angle) * dist) + 'px';
+        gateEl.appendChild(dot);
+        setTimeout(function(){ dot.remove(); }, 850);
+      }
+
+      var coreEl = gateEl.querySelector('.gate-core');
+      if(coreEl){
+        totalClicks++;
+        var grow = Math.min(totalClicks / 8, 1);
+
+        var shock = document.createElement('div');
+        shock.className = 'gate-shockwave';
+        var shockSize = 80 + grow * 200;
+        shock.style.width = shockSize + 'px';
+        shock.style.height = shockSize + 'px';
+        shock.style.top = '50%';
+        shock.style.left = '50%';
+        coreEl.parentElement.appendChild(shock);
+        setTimeout(function(){ shock.remove(); }, 750);
+
+        var coreSize = 60 + grow * 80;
+        coreEl.style.width = coreSize + 'px';
+        coreEl.style.height = coreSize + 'px';
+        var alpha = 0.12 + grow * 0.55;
+        coreEl.style.borderColor = 'rgba(255,255,255,' + alpha + ')';
+        coreEl.style.boxShadow = '0 0 ' + (grow * 30) + 'px rgba(255,255,255,' + (grow * 0.2) + ')';
+
+        var innerEl = coreEl.querySelector('.gate-core-inner');
+        if(innerEl){
+          var innerSize = 4 + grow * 10;
+          innerEl.style.width = innerSize + 'px';
+          innerEl.style.height = innerSize + 'px';
+          innerEl.style.background = 'rgba(255,255,255,' + (0.25 + grow * 0.65) + ')';
+        }
+
+        for(var s = 0; s < 3 + Math.floor(grow * 4); s++){
+          var spark = document.createElement('div');
+          spark.className = 'gate-spark';
+          var sAngle = Math.random() * Math.PI * 2;
+          var sDist = 30 + Math.random() * (coreSize * 0.9);
+          var sx = (window.innerWidth / 2) + Math.cos(sAngle) * sDist;
+          var sy = (window.innerHeight / 2) + Math.sin(sAngle) * sDist;
+          spark.style.left = sx + 'px';
+          spark.style.top = sy + 'px';
+          gateEl.appendChild(spark);
+          setTimeout(function(){ spark.remove(); }, 650);
+        }
+      }
+
+      var now = Date.now();
+      clicks.push(now);
+      if(clicks.length > REQUIRED) clicks.shift();
+
+      if(clicks.length >= REQUIRED){
+        var elapsed = (clicks[clicks.length - 1] - clicks[0]) / 1000;
+        var cps = (REQUIRED - 1) / elapsed;
+        if(cps >= MIN_CPS){
+          passed = true;
+          gateEl.classList.add('gate-pass');
+          document.body.classList.remove('gate-locked');
+          observer.disconnect();
+          clearInterval(checkInterval);
+          setTimeout(function(){
+            gateEl.remove();
+          }, 550);
+
+          var tpl = document.getElementById('app-template');
+          if(tpl){
+            document.body.appendChild(tpl.content.cloneNode(true));
+            tpl.remove();
+          }
+          initVoidCanvas();
+          initApp();
+        }
+      }
+    });
+    gateEl.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  }
+
+  attachGateListeners(gate);
+
+  var observer = new MutationObserver(function(mutations){
+    if(passed || destroyed) return;
+    var gateExists = document.getElementById('click-gate');
+    if(!gateExists){
+      tamperCount++;
+      if(tamperCount >= MAX_TAMPER){
+        observer.disconnect();
+        nukeEverything();
+        return;
+      }
+      var newGate = createGateElement();
+      document.body.insertBefore(newGate, document.body.firstChild);
+      attachGateListeners(newGate);
+      document.body.classList.add('gate-locked');
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  var checkInterval = setInterval(function(){
+    if(passed){ clearInterval(checkInterval); return; }
+    if(destroyed){ clearInterval(checkInterval); return; }
+    var gateEl = document.getElementById('click-gate');
+    var tampered = false;
+    if(!gateEl){
+      tampered = true;
+    } else {
+      var cs = window.getComputedStyle(gateEl);
+      if(cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) < 0.5) tampered = true;
+      if(parseInt(cs.zIndex) < 99999) tampered = true;
+      if(cs.position !== 'fixed') tampered = true;
+      var rect = gateEl.getBoundingClientRect();
+      if(rect.width < 100 || rect.height < 100) tampered = true;
+      if(rect.left > window.innerWidth || rect.top > window.innerHeight) tampered = true;
+      if(rect.right < 0 || rect.bottom < 0) tampered = true;
+      if(cs.pointerEvents === 'none') tampered = true;
+      if(cs.clip && cs.clip !== 'auto' && cs.clip !== 'none') tampered = true;
+      if(cs.clipPath && cs.clipPath !== 'none') tampered = true;
+      if(parseFloat(cs.maxHeight) === 0 || parseFloat(cs.maxWidth) === 0) tampered = true;
+    }
+    if(tampered && !passed){
+      tamperCount++;
+      if(tamperCount >= MAX_TAMPER){
+        clearInterval(checkInterval);
+        observer.disconnect();
+        nukeEverything();
+        return;
+      }
+      if(gateEl) gateEl.remove();
+      var newGate = createGateElement();
+      document.body.insertBefore(newGate, document.body.firstChild);
+      attachGateListeners(newGate);
+      document.body.classList.add('gate-locked');
+    }
+  }, 400);
+})();
+
+function initVoidCanvas() {
+  const canvas = document.getElementById('void-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, cx, cy;
+  let particles = [];
+  const PARTICLE_COUNT = 300;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    cx = w * 0.5;
+    cy = h * 0.5;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Particle {
+    constructor() {
+      this.reset(true);
+    }
+    reset(initial) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = initial ? Math.random() * Math.max(w, h) * 0.8 + 80 : Math.max(w, h) * 0.75 + Math.random() * 200;
+      this.x = cx + Math.cos(angle) * dist;
+      this.y = cy + Math.sin(angle) * dist;
+      this.r = Math.random() * 1.5 + 0.6;
+      this.speed = Math.random() * 0.4 + 0.2;
+      this.alpha = Math.random() * 0.6 + 0.2;
+      this.hue = 0;
+    }
+    update() {
+      const dx = cx - this.x;
+      const dy = cy - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 48) {
+        this.reset(false);
+        return;
+      }
+
+      const force = 180 / (dist + 30);
+      const angle = Math.atan2(dy, dx);
+      const tangent = angle + Math.PI * 0.52;
+
+      this.x += Math.cos(angle) * force * 1.2 + Math.cos(tangent) * this.speed * 2.2;
+      this.y += Math.sin(angle) * force * 1.2 + Math.sin(tangent) * this.speed * 2.2;
+      this.alpha = Math.min(0.9, (dist - 40) / 300);
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push(new Particle());
+  }
+
+  let mouseX = cx, mouseY = cy;
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function render() {
+    ctx.clearRect(0, 0, w, h);
+
+    cx += (w * 0.5 + (mouseX - w * 0.5) * 0.05 - cx) * 0.03;
+    cy += (h * 0.5 + (mouseY - h * 0.5) * 0.05 - cy) * 0.03;
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 46, 0, Math.PI * 2);
+    ctx.fillStyle = '#000000';
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+    }
+
+    requestAnimationFrame(render);
+  }
+  render();
+}
 
 const CODE = `-- NOTHING X
 loadstring(game:HttpGet("https://raw.githubusercontent.com/nothingff0/0/0/0"))();
@@ -1436,50 +1848,43 @@ function tokLine(line){
   }
   return o;
 }
-document.getElementById('code-area').innerHTML = CODE.split('\n').map(tokLine).join('\n');
- 
+
 function toast(){
   const t = document.getElementById('copy-toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 1400);
+  if(t){
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1600);
+  }
 }
-document.getElementById('copy-btn').addEventListener('click', () => {
-  navigator.clipboard.writeText(CODE).then(toast);
-});
- 
-const USER_ID = '1161363602146607154';
-const CDN = 'https://cdn.discordapp.com';
 
-function defaultAvatar(id){
-  const idx = (BigInt(id) >> 22n) % 6n;
-  return `${CDN}/embed/avatars/${idx}.png`;
-}
+
 
 let lastDiscordStatus = null;
 function setStatus(status){
   const dot = document.getElementById('status-dot');
+  if(!dot) return;
   const s = ['online','idle','dnd','offline'].includes(status) ? status : 'offline';
   dot.className = s;
 }
 
 async function loadAvatar(){
   const img = document.getElementById('dc-av-img');
-  img.src = defaultAvatar(USER_ID);
+  if(!img) return;
   try {
-    const res = await fetch(`https://japi.rest/discord/v1/user/${USER_ID}`);
+    const res = await fetch(`https://japi.rest/discord/v1/user/1161363602146607154`);
     if(!res.ok) throw 0;
     const d = await res.json();
     const hash = d.data?.avatar ?? d.avatar;
     if(hash){
       const ext = hash.startsWith('a_') ? 'gif' : 'webp';
-      img.src = `${CDN}/avatars/${USER_ID}/${hash}.${ext}?size=128`;
+      img.src = `https://cdn.discordapp.com/avatars/1161363602146607154/${hash}.${ext}?size=128`;
     }
   } catch(e){}
 }
 
 async function loadStatus(){
   try {
-    const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}?t=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(`https://api.lanyard.rest/v1/users/1161363602146607154?t=${Date.now()}`, { cache: 'no-store' });
     if(!res.ok) throw 0;
     const d = await res.json();
     if(d.success && d.data){
@@ -1492,450 +1897,164 @@ async function loadStatus(){
   } catch(e){}
 }
 
-if(document.documentElement.dataset.pcOnly !== 'blocked'){
-  loadAvatar();
-  loadStatus();
-  setInterval(loadStatus, 2500);
-}
-
 const I18N = {
-  pl: {
-    loader_title: "LOADSTRING LOADER NX",
-    copy_btn: "Kopiuj",
-    copied: "Skopiowano",
-    discord_profile: "Pokaż Profil",
-    ai_badge: "MADE BY AI",
-    ai_desc: "Architektura modułów, dekompilacja ScreenGui, hooki pamięci/pakietów oraz matryca keybindów opracowane przez AI na bazie HXH.lua.",
-    toggle_docs_show: "Pokaż dokumentację",
-    toggle_docs_hide: "Zwiń dokumentację",
-    s1_title: "DRZEWO INSTANCJI SCREENGUI & OKNA",
-    s1_sgui_desc: "Główny nośnik interfejsu chroniony przed detekcją i usunięciem w trakcie odradzania.",
-    s1_ros: "(GUI nie znika po śmierci gracza)",
-    s1_igi: "(pełny render ekranu z pominięciem paska TopBar)",
-    s1_win_desc: "Centralne okno robocze zawierające wszystkie podległe huby i kontrolki.",
-    s1_wo: "Zewnętrzna ramka o zmiennej poświacie.",
-    s1_was: "Moduł skalowania i płynnych animacji otwierania/zamykania okna.",
-    s1_hda: "Obszar przeciągania myszką. Zawiera kontrolki:",
-    s1_min: "Zmniejsza okno do miniatury.",
-    s1_col: "Zwija zawartość okna, zostawiając nagłówek.",
-    s1_clo: "Całkowicie ukrywa interfejs graficzny.",
-    s1_aux_desc: "Pływające widgety informacyjne oraz rozwijane listy parametrów.",
-    s1_tvt: "Wyświetla Nick wroga i odległość w studs.",
-    s1_thp: "Live pasek i procent życia przeciwnika.",
-    s1_inf: "Pływający dymek podpowiedzi (InfoTitle, InfoText).",
-    s2_title: "KOMPLETNY ROZPIS HUBÓW UI & TOGGLI",
-    s2_h1_desc: "Główny hub zarządzania mobilnością, odradzaniem, zabezpieczeniami i parametrami postaci.",
-    tog_stay: "Zamraża współrzędne w powietrzu/na ziemi (BodyPosition / AlignPosition).",
-    tog_dashblock: "Automatyczny blok podczas dasha (Q + A/S/D).",
-    tog_whirlwind: "Zmiana wektora rotacji ciała (wirowanie dookoła własnej osi).",
-    tog_fixcam: "Resetuje pozycję i FOV kamery po cutscenkach.",
-    tog_autocombo: "Automatyczne wyprowadzanie ataków na ogłuszonym celu.",
-    tog_nodashcd: "Obejście cooldownu zrywu (_dashUntil bypass).",
-    tog_bltrash: "Blacklista śmieci/obiektów z mapy przy auto-target.",
-    tog_safezone: "Teleport do podniebnej strefy z opcją Restore Position.",
-    tog_safezonehp: "Ewakuacja przy niskim HP. Czyta prawdziwe Humanoid.Health (ignorując MagicHealth), auto-wyłącza Fly/Speed.",
-    tog_hptarget: "Monitoruje i wyświetla procent życia wybranego celu.",
-    tog_noclip: "Wyłącza kolizje na wszystkich częściach ciała gracza.",
-    tog_antifling: "Blokuje nagłe zmiany AssemblyAngularVelocity przed flingiem wrogów.",
-    tog_huh: "Kompletny brak stuna / No Stun. Wymusza WalkSpeed (26.50) i Jump (50.50) oraz odcina pakiety spowolnień i ogłuszeń w __namecall.",
-    tog_jumpemote: "Skok NothingXNoStunJump z emote-cancel pozwalający uciec z kombosów.",
-    tog_dd: "Wykrywa niechciane, zbędne accessories doczepiane do postaci przez grę i natychmiast odpala Dash (Q), zrywając niekorzystny stan.",
-    tog_upward: "Wstrzyknięcie pionowego wektora prędkości do wysokich skoków.",
-    tog_fkjerk: "Blokada niechcianych pętli animacji.",
-    tog_clean: "Usuwa zbędne efekty, śmieci i BodyVelocity (_cleanToken).",
-    tog_antiinvis: "Selektywny filtr: przywraca wyłącznie Torso, Legs, Arms, Head/face, Shirt/Pants oraz Handle akcesoriów.",
-    s2_esp_desc: "Kompletny radar i nakładka informacyjna nad postaciami.",
-    esp_hp: "Pasek i procent punktów życia nad graczem.",
-    esp_name: "Nick i aktualna postać (Saitama, Garou, Genos...).",
-    esp_ult: "Wskaźnik naładowania trybu Awakening.",
-    esp_streak: "Licznik serii zabójstw (Killstreak).",
-    esp_ultesp: "Wyróżnienie graczy z aktywnym ultem.",
-    esp_deathcntresp: "Radar gotowości umiejętności wroga (Strong/Weak).",
-    esp_ultedinfo: "Czas trwania i status aktywnego awakenigu.",
-    esp_antideath: "Blokada wrogiego wykrywania licznika.",
-    esp_deathv: "Detektor finisherów Bald Ult (11365563255, 12983333733, 13927612951) z zrzutem do -900 studs.",
-    esp_blanim: "Blacklista wybranych animacji.",
-    s2_block_desc: "Moduł parowania ciosów i kontrowania serii ataków.",
-    blk_autoblock: "Główny przełącznik silnika obrony.",
-    blk_m1after: "Natychmiastowy cios M1 po udanym bloku.",
-    blk_counter: "Detekcja nadchodzącego M1 z histerezą (0 utraty staminy).",
-    blk_m1reset: "Natychmiastowy reset animacji ciosu.",
-    s2_death_desc: "Błyskawiczny reset samobójczy oraz mechanika precyzyjnego pozycjonowania wall combo.",
-    death_btn_lbl: "Główny przycisk <- DEATH ->:",
-    death_btn_desc: "Błyskawicznie ustawia HumanoidStateType.Dead oraz Health = 0 (natychmiastowy reset).",
-    death_mat_lbl: "Matryca Desync & Backpack Teleportów (12 toggli):",
-    wall_combo_lbl: "Moduł Wall Combo & Przyciągania (Bring):",
-    wc_bring: "Zasysanie wroga do idealnej pozycji przed ścianą.",
-    wc_ping: "Kompensacja opóźnienia na bazie średniego pingu (_bwAutoPingEma).",
-    wc_rot: "Czas trwania obrotu oraz kąt uderzenia o ścianę.",
-    wc_blk: "Wyłączenie kolizji ciał w trakcie podwójnego kombosa.",
-    s3_title: "PEŁNA MATRYCA KLAWISZY & INSTRUKCJA UŻYCIA",
-    s3_desc: "Panel KeybindFrame w KeybindSystemHub pozwala na dynamiczne bindowanie, ukrywanie (hide) oraz blokowanie (block) każdego skrótu. Poniżej znajduje się kompletny wykaz domyślnych klawiszy i instrukcja użycia.",
-    th_key: "Klawisz",
-    th_name: "Nazwa w Kodzie",
-    th_func: "Zmienna & Funkcja",
-    th_what: "Co Dokładnie Robi",
-    th_how: "Jak Używać (Krok po Kroku)",
-    s4_title: "INTERNAL HOOKS & ARCHITEKTURA BYPASSÓW",
-    s4_namecall_desc: "Główny filtr pakietów wychodzących z klienta do serwera gry.",
-    s4_desync: "Blokuje niechciane potwierdzenia pozycji w stanie _huhOnState.",
-    s4_fake_ping: "Wstrzykuje sztuczny ping do pakietów walki, dezorientując wrogie predykcje.",
-    s4_rem_blk: "Blokuje wywołania powodujące glitchowanie postaci gracza.",
-    s4_index_desc: "Obejście wbudowanego limitu zabójczej próżni w silniku Roblox (Kill Boundary Bypass).",
-    s4_void_hp: "Gdy Y < -400 (Void Z na -505 lub V na -900), odczyt HP zwraca 100.",
-    s4_void_res: "Silnik gry nie rejestruje śmierci od przekroczenia limitu próżni.",
-    s4_void_stab: "Pozwala na swobodne przebywanie pod mapą bez utraty życia i desyncu kamery.",
-    s4_anim_desc: "Śledzenie niebezpiecznych animacji finisherów oraz zapobieganie cofkom serwera.",
-    s4_anim_mon: "Monitoruje sygnatury ID animacji finisherów Saitama Ult (11365563255, 12983333733, 13927612951).",
-    s4_notp: "Zeruje wektor prędkości (AssemblyLinearVelocity = Vector3.zero), zapobiegając cofnięciu gracza przez antycheat.",
-    s4_sz_ex: "jest wyłączone z restrykcji NoTP, gwarantując 100% udaną ewakuację.",
-    s4_nx_desc: "Architektura eliminująca spadki klatek (0ms Garbage Collection stutter).",
-    s4_nx_reg: "Zamiast obciążającego workspace:GetChildren(), skrypt korzysta z globalnej tabeli _G.NX_Players_check_list.",
-    s4_nx_char: "Bezpośrednie wskaźniki do HRP i Humanoida, aktualizowane tylko na CharacterAdded i CharacterRemoving.",
-    s4_nx_gc: "Brak tworzenia tymczasowych tabel w pętli Heartbeat -> zero stutteru FPS.",
-    s5_title: "CUSTOMUI — 28 TRYBÓW TELEPORTACJI & OFFSETY",
-    s5_modes_title: "28 Trybów Pozycjonowania Względem Przeciwnika",
-    s5_modes_desc: "Pełna lista zaimplementowanych trybów pozycji w rozwijanym menu CustomUI (getTPModeCleanItems):",
-    s5_inputs_title: "Precyzyjne Pola Wprowadzania Wartości Wektorowych:",
-    s5_off: "manualne pozycjonowanie w studs.",
-    s5_rot: "kąt patrzenia postaci.",
-    s5_slots: "Lewy klik = wczytanie slotu | Prawy klik = zapisanie bieżącej konfiguracji.",
-    s6_title: "WALK FLING — 44 TRAJEKTORIE WYRZUTU",
-    s6_wf_title: "Pełna Matryca 44 Trybów Wyrzucania Przeciwnika",
-    s6_wf_desc: "Zaimplementowane w kodzie HXH.lua wiersze kierunków uderzenia siłą kinetyczną (makeWFTog):"
-  },
   en: {
     loader_title: "LOADSTRING LOADER NX",
     copy_btn: "Copy",
     copied: "Copied",
     discord_profile: "Show Profile",
-    ai_badge: "MADE BY AI",
-    ai_desc: "Module architecture, ScreenGui tree, memory/packet hooks, and keybind matrix engineered by AI based on HXH.lua.",
-    toggle_docs_show: "Show Documentation",
-    toggle_docs_hide: "Hide Documentation",
-    s1_title: "SCREENGUI INSTANCE TREE & WINDOWS",
-    s1_sgui_desc: "Root UI carrier protected against detection and garbage collection upon respawn.",
+    doc_ai_badge: "DOCUMENTATION MADE BY AI",
+    toggle_docs: "DOCUMENTATION PANEL",
+    s1_title: "SCREENGUI INSTANCE TREE & ROOT CORE",
+    s1_sgui_desc: "Root UI container protected against detection and garbage collection upon respawn.",
     s1_ros: "(GUI persists across player respawn cycles)",
     s1_igi: "(Full-screen viewport render ignoring Roblox top bar)",
     s1_win_desc: "Central viewport container housing all sub-hubs and controls.",
-    s1_wo: "Outer glow bounding border with adaptive opacity.",
+    s1_wo: "Outer glow bounding border with adaptive accretion glow.",
     s1_was: "Tween scaling and smooth collapse controller.",
     s1_hda: "Mouse drag bounding box containing title bar controls:",
     s1_min: "Shrinks window to a minimal footprint.",
     s1_col: "Folds hub content, retaining only the title header.",
     s1_clo: "Completely hides the graphical interface.",
-    s1_aux_desc: "Floating status overlay widgets and parameter selectors.",
+    s1_aux_desc: "Floating status overlay widgets and real-time enemy health indicators.",
     s1_tvt: "Displays enemy username and distance in studs.",
     s1_thp: "Live percentage and health bar indicator.",
-    s1_inf: "Contextual floating notification tooltip (InfoTitle, InfoText).",
-    s2_title: "COMPLETE UI HUBS & TOGGLES BREAKDOWN",
-    s2_h1_desc: "Primary mobility, respawn, safety zone, and character state controller.",
+    s1_inf: "Contextual floating notification tooltip for combat parameters.",
+    s2_title: "15 SYSTEM HUBS & MODULAR SUBSYSTEMS",
+    h_mov_desc: "Primary mobility, respawn, safety zone, and character state controller.",
     tog_stay: "Freezes world position in mid-air/ground (BodyPosition / AlignPosition).",
     tog_dashblock: "Auto-activates block during dash execution (Q + A/S/D).",
     tog_whirlwind: "Inverts character angular vector (rapid axial spin).",
     tog_fixcam: "Recovers camera angle and FOV after broken game cutscenes.",
     tog_autocombo: "Chains automated attack combos on stunned enemy targets.",
     tog_nodashcd: "Bypasses dash cooldown limitation (_dashUntil bypass).",
-    tog_bltrash: "Blacklists junk props from auto-targeting routines.",
-    tog_safezone: "Evacuates player to sky sanctuary with Restore Position support.",
-    tog_safezonehp: "Low-health evacuation reading true Humanoid.Health (ignoring MagicHealth), auto-disables Fly/Speed.",
-    tog_hptarget: "Monitors and displays selected enemy health percentage.",
-    tog_noclip: "Disables limb collision geometry across character model.",
-    tog_antifling: "Restricts AssemblyAngularVelocity shifts to prevent hostile flings.",
-    tog_huh: "Complete Stun Immunity (No Stun). Enforces WalkSpeed (26.50) and Jump (50.50) in Heartbeat while filtering incoming slowdowns in __namecall.",
-    tog_jumpemote: "NothingXNoStunJump emote-canceling jump escaping hitstuns.",
-    tog_dd: "Detects unwanted accessories attached to character by game events and immediately fires Dash (Q) to escape bad states.",
-    tog_upward: "Injects vertical velocity impulse for high-altitude jumps.",
-    tog_fkjerk: "Suppresses abusive cyclic animations.",
-    tog_clean: "Purges stray effects, debris, and broken BodyVelocity instances (_cleanToken).",
-    tog_antiinvis: "Selective render: only restores Torso, Legs, Arms, Head/face, Shirt/Pants, and accessory Handles.",
-    s2_esp_desc: "Full HUD billboard overlays drawn above character heads.",
-    esp_hp: "Health bar and percentage above opponent.",
-    esp_name: "Username and active character class (Saitama, Garou, Genos...).",
-    esp_ult: "Awakening ultimate charge meter display.",
-    esp_streak: "Current server killstreak counter.",
-    esp_ultesp: "Visual highlight for players with active Awakening.",
-    esp_deathcntresp: "Opponent skill cooldown radar (Strong/Weak skills).",
-    esp_ultedinfo: "Awakening duration and expiration tracker.",
-    esp_antideath: "Blocks enemy detection of death counters.",
-    esp_deathv: "Counter for Bald Ult finishers (11365563255, 12983333733, 13927612951) with -900 void step.",
-    esp_blanim: "Blacklists specific game animation tracks.",
-    s2_block_desc: "Reaction engine for automatic parrying and attack counters.",
-    blk_autoblock: "Master toggle for defensive block engine.",
-    blk_m1after: "Fires instant counter M1 punch right after a successful block.",
-    blk_counter: "Incoming M1 punch detector with hysteresis (0 stamina consumed).",
-    blk_m1reset: "Instant punch animation cancellation.",
-    s2_death_desc: "Instant desync reset and wall combo angle positioning subsystem.",
-    death_btn_lbl: "Master <- DEATH -> Button:",
-    death_btn_desc: "Instantly sets HumanoidStateType.Dead and Health = 0 (clean reset).",
-    death_mat_lbl: "Desync & Backpack Teleport Matrix (12 toggles):",
-    wall_combo_lbl: "Wall Combo & Bring Engine:",
+    tog_safezonehp: "Low-health evacuation reading true Humanoid.Health (ignoring MagicHealth).",
+    tog_huh: "Complete Stun Immunity (No Stun). Enforces WalkSpeed 26.50 and Jump 50.50 while filtering incoming slowdowns in __namecall.",
+    tog_antiinvis: "Restores invisible limbs and detects foreign accessories with immediate dash escape.",
+    h_fp_desc: "Synthetic latency simulation and network packet desynchronization engine.",
+    h_fp_1: "Injects synthetic latency to disrupt enemy predictive tracking algorithms.",
+    h_fp_2: "Introduces micro-lag jitter preventing enemy auto-block routines from parrying.",
+    h_sfh_desc: "Precision kinetic movement velocity and character hip height controller with quick-edit input boxes.",
+    h_sfh_1: "Injects camera-aligned _nxApplySpeed vector without server rollbacks (default 5).",
+    h_sfh_2: "3D directional flight (flySpeed / LinearVelocity) with hover locking and zero drift (default 5).",
+    h_sfh_3: "Manual model height elevation to evade low-sweep attacks (default 0).",
+    h_pow_desc: "Melee reach extender and collision hitbox multiplier.",
+    h_pow_1: "Expands attack collision geometry for M1 strikes and special skills.",
+    h_pow_2: "Dynamic scaling of damage registration radius without animation desync.",
+    h_orb_desc: "High-speed circumferential orbiting engine around locked enemy target with 40 implemented modes.",
+    h_orb_1: "Rapid angular velocity rotation at specified radial distance.",
+    h_orb_2: "Continuous vector variation preventing enemies from landing directional skills.",
+    h_bw_desc: "Wall suction and precise rebound impact angle alignment engine.",
     wc_bring: "Draws opponent into optimal wall collision trajectory.",
     wc_ping: "Dynamic ping compensation using EMA latency estimator (_bwAutoPingEma).",
     wc_rot: "Rotation duration and wall impact angle.",
     wc_blk: "Disables character collision overlap during dual combos.",
-    s3_title: "COMPLETE KEYBINDS MATRIX & USAGE GUIDE",
-    s3_desc: "The KeybindFrame panel in KeybindSystemHub allows dynamic binding, hiding, and blocking of every shortcut. Below is the complete key reference and usage manual.",
+    s2_block_desc: "Reaction engine for automatic parrying and attack counters in sub-milliseconds.",
+    blk_autoblock: "Master toggle for automated defensive block engine.",
+    blk_m1after: "Fires instant counter M1 punch right after a successful block.",
+    blk_counter: "Incoming M1 punch detector with hysteresis (0 stamina consumed).",
+    blk_m1reset: "Instant punch animation cancellation for accelerated combo chains.",
+    h_sess_desc: "Session lifetime tracker, memory stability guard, Rejoin option, and CoreGui trace wiper.",
+    h_sess_1: "Allows immediate connection to chosen session or reconnecting to same server.",
+    h_sess_2: "Auto-destroys and unlinks GUI if server memory dump probe is detected.",
+    h_kb_desc: "Complete management of 18 keyboard shortcuts, masking, and input interception.",
+    h_kb_1: "Hides shortcut UI labels for an uncluttered viewport.",
+    h_kb_2: "Dynamic binding to any keyboard or mouse input on the fly.",
+    h_tr_desc: "Comprehensive manipulation engine for trash cans, boulders, and interactive physical props.",
+    h_tr_1: "Configurable object return speed (speed-back = 153).",
+    h_tr_2: "Trash, Instant, Just Instant, Ultra Instant, Auto Throw, and Skip TrashMan.",
+    h_afk_desc: "Fully autonomous bot for player elimination and automated kill farming.",
+    h_afk_1: "6 Target selection modes: Low HP, Target, Closest, CN-, CN_, Random.",
+    h_afk_2: "Universal X% HP threshold triggering target completion across all modes.",
+    h_afk_3: "Default safety thresholds: Safe 20% and 2000 studs maximum combat radius.",
+    h_tp_desc: "Advanced CFrame warping with instantaneous momentum vector zeroing.",
+    h_tp_1: "Neutralizes centrifugal forces to prevent anti-cheat position rollbacks.",
+    h_tp_2: "Instantaneous coordinate shift without desynchronizing character animations.",
+    h_void_desc: "Next-gen abyss sub-system featuring adaptive automation and per-TP tuning.",
+    h_void_1: "Auto toggle automatically calculating safe depth and warp interval.",
+    h_void_2: "Independent per tp (s) and per tp (y -) parameters integrated with Z (-505) and V (-900) binds.",
+    h_exec_desc: "Dual interface for automated script execution and instant server rejoin.",
+    h_exec_1: "Persistent auto-execution after game server transitions.",
+    h_exec_2: "Instant server reconnection via TeleportService.",
+    h_bl_desc: "Forces continuous character torso orientation toward opponent with offline targeting support.",
+    h_bl_1: "Lock, Target, Closest, CN, T/Close and Root, Head, Torso, Mouse aim parts.",
+    h_bl_2: "Dedicated offline module allowing input of target Username or UserID outside viewport.",
+    s3_afk_title: "AFK-FK AUTOMATED COMBAT ENGINE & TELEMETRY",
+    s3_afk_modes_title: "Complete 6 Target Selection Modes Matrix",
+    s3_afk_modes_desc: "The afk-FK engine features 6 dedicated algorithms for acquiring the next target:",
+    s3_afk_x_title: "Universal X% Target Health Threshold",
+    s3_afk_x_desc: "The engine checks if the target's HP dropped below the configured X% (or died). Operates across ALL 6 modes (Low HP, Target, Closest, CN-, CN_, Random) for rapid target cycling.",
+    s3_afk_safe_title: "Safety Thresholds & Default Limits",
+    s3_afk_safe_desc: "Default Safe Zone threshold set to 20% HP (immediate sky retreat). Default search radius set to 2000 studs to prevent attempting to warp outside map boundaries.",
+    s3_afk_hdr_title: "Status Header (afkCheckLabel)",
+    s3_afk_hdr_desc: "White title color (Color3.fromRGB(255, 255, 255)). Displays active mode, TP position, distance, and optional X% threshold (e.g. CN-|Behind|4.3s|X14% - Target (82hp) or WAIT_FK).",
+    s4_tr_title: "PROP MANIPULATION & BODY LOCK GYRO",
+    s4_tr_eng_title: "Interactive Prop Manipulation Engine",
+    s4_tr_eng_desc: "Scans map for trash cans, rocks, and throwable items. Features: Trash, Instant, Just Instant, Ultra Instant, Auto Throw, Skip TrashMan, Low HP, Auto, and Speed Return tuning (153).",
+    s4_bl_eng_title: "Torso Orientation Lock & Offline Engine",
+    s4_bl_eng_desc: "Forces chest facing angle directly toward opponent: Target, Closest, CN, T/Close with aim parts (Root, Head, Torso, Mouse), modifiers (3D Pitch, Smooth, Predict, Invert), delays (0s to 0.20s), and separate BL Offline module for manual target entry.",
+    s5_kb_title: "COMPLETE KEYBINDS MATRIX & OPERATIONAL GUIDE",
+    s5_kb_desc: "Every shortcut in HXH.lua is fully remappable via KeybindFrame. Below is the complete reference table of 18 default keybinds, internal code identifiers, and step-by-step instructions.",
     th_key: "Keybind",
-    th_name: "Code Identifier",
-    th_func: "Variable & Function",
+    th_name: "Identifier",
+    th_func: "Internal Handler",
     th_what: "Technical Functionality",
     th_how: "How to Use (Step-by-Step)",
-    s4_title: "INTERNAL HOOKS & BYPASS ARCHITECTURE",
-    s4_namecall_desc: "Primary packet filtering metamethod hook between client and server.",
-    s4_desync: "Blocks unwanted position acknowledgments while in _huhOnState.",
-    s4_fake_ping: "Injects synthetic latency to disrupt enemy predictive tracking.",
-    s4_rem_blk: "Filters RemoteEvents causing character glitching.",
-    s4_index_desc: "Roblox engine kill-boundary bypass for sub-surface coordinates.",
-    s4_void_hp: "When Y < -400 (Void Z at -505 or V at -900), Health reads as 100.",
-    s4_void_res: "Game engine will not register void death.",
-    s4_void_stab: "Allows staying deep under map indefinitely without camera drift.",
-    s4_anim_desc: "Animation monitor and anti-rollback teleport velocity stabilizer.",
-    s4_anim_mon: "Monitors finisher IDs for Saitama Ult (11365563255, 12983333733, 13927612951).",
-    s4_notp: "Zeros assembly linear velocity (Vector3.zero) to prevent server rollbacks.",
-    s4_sz_ex: "is exempt from NoTP restrictions, ensuring 100% evacuation success.",
-    s4_nx_desc: "High-frequency player cache preventing garbage collection pauses (0ms GC lag).",
-    s4_nx_reg: "Uses global _G.NX_Players_check_list instead of heavy workspace:GetChildren().",
-    s4_nx_char: "Direct cached pointers to HRP and Humanoid updated on CharacterAdded/Removing.",
-    s4_nx_gc: "Zero transient table allocations in Heartbeat -> zero FPS stutter.",
-    s5_title: "CUSTOMUI — 28 TELEPORT MODES & OFFSETS",
-    s5_modes_title: "28 Dynamic Opponent Placement Modes",
-    s5_modes_desc: "Full list of positioning presets in CustomUI dropdown (getTPModeCleanItems):",
-    s5_inputs_title: "Vector Input Fields & Preset Slots:",
-    s5_off: "Manual offset displacement in studs.",
-    s5_rot: "Euler viewing angle orientation.",
-    s5_slots: "Left Click = Load Slot | Right Click = Save current configuration.",
-    s6_title: "WALK FLING — 44 TRAJECTORY MODES",
-    s6_wf_title: "Full 44 Fling Trajectory Modes Matrix",
-    s6_wf_desc: "Directional kinetic impulse vectors implemented in HXH.lua (makeWFTog):"
+    s6_hook_title: "METAMETHOD HOOKS & INTERNAL BYPASS ARCHITECTURE",
+    s6_nc_desc: "Primary packet filtering metamethod hook between client and server.",
+    s6_nc_1: "Filters slowdown and ragdoll packets while in active _huhOnState.",
+    s6_nc_2: "Intercepts hostile remote events causing character glitching.",
+    s6_nc_3: "Injects synthetic delay into M1 packets to disrupt opponent parry timing.",
+    s6_idx_desc: "Roblox engine kill-boundary bypass for sub-surface coordinates (FallenPartsDestroyHeight).",
+    s6_idx_1: "When Y < -400 (Void Z at -505 or V at -900), Humanoid.Health reads as 100.",
+    s6_idx_2: "Game engine will not register void death, allowing indefinite sub-map presence without camera desync.",
+    s6_huh_desc: "Unconditional protection against hitstun and character control loss.",
+    s6_huh_1: "Enforces WalkSpeed = 26.50 and JumpPower = 50.50 on every Heartbeat frame.",
+    s6_huh_2: "Automatically recovers HumanoidStateType.Running, ignoring knockdown animations.",
+    s6_rj_desc: "Autonomous defense mechanism against server anti-cheat or moderator kicks.",
+    s6_rj_1: "Replaces lp.Kick with an empty function preventing instantaneous client disconnection.",
+    s6_rj_2: "Automatically re-establishes connection via TeleportService if removed from player hierarchy.",
+    s7_blk_title: "COMBAT ANIMATION BLOCKERS, AUTO EMOTE & PLACES TP",
+    s7_hit_title: "Strike & Stagger Animation Blocker",
+    s7_hit_desc: "Real-time scanner intercepting opponent strike, stagger, and knockback animations. Instantly cancels incoming animation tracks, preventing opponents from chaining inescapable stunlock loops in close-quarters melee.",
+    s7_ult_title: "Bald Ult & Saitama Finisher Blocker",
+    s7_ult_desc: "Automated monitor detecting Saitama ultimate finishers (Serious Punch, Omni-Directional Punch, Death Counter) and special skills. Identifies hazardous animation tracks within fractions of a second, stopping them to shield against instant elimination.",
+    s7_emote_title: "Smart Auto-Emote Engine with M1 Auto-Pause",
+    s7_emote_desc: "Background loop continually playing the player's last active emote. Features an intelligent event filter: upon pressing Left Click (M1 strike), the emote instantly pauses for 0.8 seconds, ensuring 100% attack responsiveness with zero combo stutter.",
+    s7_places_title: "Landmark Coordinates Teleport Matrix",
+    s7_places_desc: "Instant warp coordinates bound to ~ (Tilde) keybind:",
+    s8_fl_title: "CUSTOMUI 30 TP MODES, 40 ORBIT & 90 WALK FLING TRAJECTORIES",
+    s8_tp_title: "30 Dynamic Opponent Placement Modes",
+    s8_tp_desc: "Complete list of positioning presets in CustomUI (stud offsets and Euler angles): Behind, Behind Custom, Front, Left, Right, Above, Under, Head, Feet, Middle, Aggressive, Auto, Auto Custom, Predict, Look, Random, BackShot, Cross, Shadow, SideStep, BlindSpot, CounterAngle, Flank, OrbitShot, Intercept, Phantom, Grounded, CornerCut, BreachPoint, Wraith. Presets: Left Click = Load | Right Click = Save.",
+    s8_orb_modes_title: "40 Orbiting Trajectories Around Target",
+    s8_orb_modes_desc: "Implemented advanced orbital trajectories: Horizontal, Vertical, Both, Random, Spiral, Figure8, Bounce, Wave, Heart, Zigzag, Helix, Pendulum, Mosquito, Tornado, Drunk, Square, BackShot, FaceHug, UFO, YoYo, Snake, Bees, Star, Infinity, Sidehop, Ceiling, Potato, Rainbow, Corkscrew, Diamond, Pulse, Bloom, Warp, Hexagon, Chaos, Magnet, Ribbon, Coil, Saw, Swoop.",
+    s8_wf_title: "Full 90 Fling Trajectory Modes Matrix",
+    s8_wf_desc: "Directional kinetic impulse vectors implemented in HXH.lua with base, C-Target, and CN-Target variants:"
   }
 };
 
 const KEYBIND_ROWS = [
-  {
-    key: "Left-Alt",
-    name: "Menu Toggle",
-    func: "setSettingsVisible(not settingsOpen)",
-    what: {
-      pl: "Otwiera i ukrywa całe okno graficzne WindowUI w ScreenGui.",
-      en: "Toggles visibility of the entire WindowUI frame inside ScreenGui."
-    },
-    how: {
-      pl: "Wciśnij raz na klawiaturze, aby pokazać menu. Wciśnij ponownie, aby ukryć interfejs podczas walki.",
-      en: "Press once to show the menu. Press again to hide the interface during combat."
-    }
-  },
-  {
-    key: "C",
-    name: "Target Selector",
-    func: "targetSelectKeybind • toggleMouseTargetSelection()",
-    what: {
-      pl: "Namierza gracza pod kursorem myszy lub wybiera najbliższego żywego wroga.",
-      en: "Locks onto opponent under mouse cursor or chooses closest living target."
-    },
-    how: {
-      pl: "Skieruj kursor myszy na przeciwnika i wciśnij C. Nazwa i HP celu pojawią się w TargetFrame.",
-      en: "Hover cursor over an opponent and press C. Target username and HP will appear in TargetFrame."
-    }
-  },
-  {
-    key: "Z",
-    name: "Void (Z)",
-    func: "voidDeadKeybind • toggleVoidDead()",
-    what: {
-      pl: "Zrzuca postać na stałą głębokość -505 Y z wyzerowaniem prędkości (bezpieczny void).",
-      en: "Drops character to constant depth of -505 Y with zeroed velocity vector (safe void drop)."
-    },
-    how: {
-      pl: "Wciśnij Z w trakcie zagrożenia combo. Postać zniknie na -505. Wciśnij Z ponownie, by wrócić.",
-      en: "Press Z during an inescapable combo. Player drops to -505. Press Z again to return to surface."
-    }
-  },
-  {
-    key: "V",
-    name: "(V) Void Step / SetBack",
-    func: "setBackKeybind • toggleDVoidDead()",
-    what: {
-      pl: "Dynamiczny proximity void. Gdy namierzony cel <= 25 studs, krokowo schodzi o -5 od -505 do -900 Y.",
-      en: "Dynamic proximity void. When target <= 25 studs, steps down by -5 from -505 to -900 Y. Surfaces when > 25 studs."
-    },
-    how: {
-      pl: "1. Namierz cel klawiszem C. 2. Aktywuj toggle (V). Gdy cel podejdzie na 25 studs, postać zanurzy się pod ziemię.",
-      en: "1. Lock target with C. 2. Enable toggle (V). When target enters 25 studs, player smoothly submerges."
-    }
-  },
-  {
-    key: "E",
-    name: "Speed Hack",
-    func: "speedKeybind • toggleSpeed()",
-    what: {
-      pl: "Wstrzykuje niestandardowy wektor prędkości (_nxApplySpeed) powiązany z orientacją kamery bez cofki.",
-      en: "Injects camera-aligned custom velocity vector (_nxApplySpeed) without triggering server rollbacks."
-    },
-    how: {
-      pl: "Wciśnij E, aby włączyć szybki bieg. Poruszaj się klawiszami W/S/A/D. Wciśnij E ponownie, aby wyłączyć.",
-      en: "Press E to toggle speed sprint. Move using W/S/A/D. Press E again to toggle off."
-    }
-  },
-  {
-    key: "R",
-    name: "Smooth Fly",
-    func: "flyKeybind • toggleFly()",
-    what: {
-      pl: "Uruchamia swobodny lot wektorowy (LinearVelocity) z blokadą wysokości i zawisem w miejscu.",
-      en: "Activates 3D directional flight (LinearVelocity) with hover locking and zero drift."
-    },
-    how: {
-      pl: "Wciśnij R, aby wzbić się w powietrze. Steruj kamerą i ruchem. Wciśnij R ponownie, aby wylądować.",
-      en: "Press R to take flight. Steer with camera and movement keys. Press R again to land."
-    }
-  },
-  {
-    key: "T",
-    name: "Attack TP",
-    func: "attackTpKeybind • toggleAttackTp()",
-    what: {
-      pl: "Teleportuje postać natychmiast za plecy namierzonego celu w pozycji gotowej do ataku.",
-      en: "Instantly teleports behind selected target with synchronized offensive orientation."
-    },
-    how: {
-      pl: "Wybierz cel klawiszem C, następnie wciśnij T. Postać natychmiast pojawi się za plecami wroga.",
-      en: "Lock target using C, then press T. You will instantly snap behind the enemy ready to strike."
-    }
-  },
-  {
-    key: "Y",
-    name: "Auto TP",
-    func: "autoTpKeybind • toggleAutoTp()",
-    what: {
-      pl: "Ciągła pętla utrzymująca pozycję gracza tuż za plecami wroga w trakcie wymiany ciosów.",
-      en: "Continuous tracking loop tethering you behind the opponent's back throughout combat exchanges."
-    },
-    how: {
-      pl: "Wybierz cel i wciśnij Y. Postać będzie automatycznie kleić się do pleców przeciwnika.",
-      en: "Lock target and press Y. Your character will automatically stick to their back."
-    }
-  },
-  {
-    key: "X",
-    name: "Walk Fling",
-    func: "walkFlingKeybind • WalkFling_toggle()",
-    what: {
-      pl: "Ustawia ekstremalną rotację AssemblyAngularVelocity (45,000 power), wyrzucając graczy przy dotknięciu.",
-      en: "Sets extreme angular velocity rotation (45,000 power), launching players upon physical contact."
-    },
-    how: {
-      pl: "Wciśnij X i podejdź do wroga. Zostanie on natychmiast wystrzelony poza mapę.",
-      en: "Press X and make contact with an opponent to instantly launch them into orbit."
-    }
-  },
-  {
-    key: "LeftCtrl",
-    name: "Get Trash",
-    func: "getTrashState.keybind • GetTrash_key()",
-    what: {
-      pl: "Skanuje mapę w poszukiwaniu śmieci/przedmiotów (kosze, kamienie) i teleportuje je wprost do gracza.",
-      en: "Scans map for interactive trash/props and brings them directly into player pickup range."
-    },
-    how: {
-      pl: "Przytrzymaj lub kliknij Left-Ctrl, aby błyskawicznie zgarnąć obiekty z okolicy do rzucania.",
-      en: "Hold or press Left-Ctrl to magnetize all surrounding throwable props directly to your hands."
-    }
-  },
-  {
-    key: "H",
-    name: "Orbit",
-    func: "orbitKeybind • Orbit_toggle()",
-    what: {
-      pl: "Błyskawiczne krążenie po orbicie wokół namierzonego celu z dużą prędkością.",
-      en: "Rapid circumferential orbiting around locked target to disorient enemy aim."
-    },
-    how: {
-      pl: "Zaznacz wroga (C) i wciśnij H. Twoja postać zacznie krążyć wokół niego.",
-      en: "Target player (C) and press H to initiate high-speed orbital flight around them."
-    }
-  },
-  {
-    key: "5",
-    name: "View / Spectate",
-    func: "viewKeybind • View_toggle()",
-    what: {
-      pl: "Przełącza kamerę gracza na perspektywę namierzonego przeciwnika.",
-      en: "Switches local camera view directly to selected opponent's perspective."
-    },
-    how: {
-      pl: "Wybierz cel klawiszem C i wciśnij 5. Wciśnij 5 ponownie, by powrócić.",
-      en: "Select target with C and press 5. Press 5 again to restore local camera."
-    }
-  },
-  {
-    key: "6",
-    name: "Direct Fling",
-    func: "flingKeybind • syncFlingKeybindDisplay()",
-    what: {
-      pl: "Wykonuje pojedynczy, bezpośredni strzał rotacyjny flingiem w stronę namierzonego przeciwnika.",
-      en: "Executes a single focused kinetic fling impulse directly into targeted enemy model."
-    },
-    how: {
-      pl: "Wybierz cel i wciśnij 6. Postać wykona uderzenie kinetic fling w model wroga.",
-      en: "Lock target and press 6 to fire a targeted kinetic fling impulse directly at them."
-    }
-  },
-  {
-    key: "7",
-    name: "Bring Wall Combo",
-    func: "bringXKeybind • syncBringKeybindDisplay()",
-    what: {
-      pl: "Przyciąga przeciwnika i pozycjonuje go do uderzenia w ścianę pod kątem zadanym w Wall Combo Hub.",
-      en: "Drags target into precise wall combo alignment according to preset angles."
-    },
-    how: {
-      pl: "Wciśnij 7 w pobliżu ściany, aby zassać wroga pod zdefiniowany kąt i rozpocząć combo.",
-      en: "Press 7 near any wall surface to pull the opponent directly into the rebound angle."
-    }
-  },
-  {
-    key: "F1",
-    name: "Body Lock",
-    func: "bodyLockKeybind • toggleBodyLock()",
-    what: {
-      pl: "Blokuje rotację postaci (NXBodyLockGyro) w stronę wroga, niezależnie od ruchów myszki i kamery.",
-      en: "Forces character torso facing direction directly at opponent regardless of mouse panning."
-    },
-    how: {
-      pl: "Wciśnij F1, aby utrzymać postać zawsze skierowaną twarzą do przeciwnika podczas walki wręcz.",
-      en: "Press F1 to maintain continuous front-facing orientation toward target in melee combat."
-    }
-  },
-  {
-    key: "~ (Tilde / `)",
-    name: "TP Places",
-    func: "kTog.Places • resolvePlaceCF(selectedPlace)",
-    what: {
-      pl: "Teleportuje postać do wybranego z menu punktu orientacyjnego na mapie (selectedPlace: Middle Of Map, Prison, Mountains, Atomic Base itp.) za pomocą applyTeleportRootState.",
-      en: "Instantly warps character to the chosen destination preset (selectedPlace: Middle Of Map, Prison, Mountains, Atomic Base, etc.) via applyTeleportRootState."
-    },
-    how: {
-      pl: "1. Wybierz cel w rozwijanej liście Places. 2. Wciśnij ~ (tyldę / backquote), aby natychmiast przemieścić się w wybrane miejsce na mapie.",
-      en: "1. Select destination in Places dropdown. 2. Press ~ (tilde / backquote) to instantly teleport to the chosen map location."
-    }
-  },
-  {
-    key: "Space",
-    name: "No Stun Jump",
-    func: "NothingXNoStunJump",
-    what: {
-      pl: "Wymusza odskok klienta nawet podczas trwania animacji ogłuszenia lub emotki.",
-      en: "Forces client-side jump impulse to break free from stunlocks and emote freezes."
-    },
-    how: {
-      pl: "Wciskaj spację podczas otrzymywania ciosów, aby przerwać stunlock i wyskoczyć w powietrze.",
-      en: "Tap Space during enemy hit chains to force jump cancellation and break combos."
-    }
-  }
+  { key: "Left-Alt", name: "Menu Toggle", func: "setSettingsVisible(not settingsOpen)", what: "Toggles visibility of the entire WindowUI frame inside ScreenGui.", how: "Press once to show the menu. Press again to hide the interface during combat." },
+  { key: "C", name: "Target Selector", func: "targetSelectKeybind • toggleMouseTargetSelection()", what: "Locks onto opponent under mouse cursor or chooses closest living target.", how: "Hover cursor over an opponent and press C. Target username and HP will appear in TargetFrame." },
+  { key: "Z", name: "Void (Z)", func: "voidDeadKeybind • toggleVoidDead()", what: "Drops character to constant depth of -505 Y with zeroed velocity vector (safe void drop).", how: "Press Z during an inescapable combo. Player drops to -505. Press Z again to return to surface." },
+  { key: "V", name: "Void Step / SetBack", func: "setBackKeybind • toggleDVoidDead()", what: "Dynamic proximity void. When target <= 25 studs, steps down by -5 from -505 to -900 Y. Surfaces when > 25 studs.", how: "1. Lock target with C. 2. Enable toggle V. When target enters 25 studs, player smoothly submerges." },
+  { key: "E", name: "Speed Hack", func: "speedKeybind • toggleSpeed()", what: "Injects camera-aligned custom velocity vector (_nxApplySpeed, default 5) without triggering server rollbacks.", how: "Press E to toggle speed sprint. Move using W/S/A/D. Press E again to toggle off." },
+  { key: "R", name: "Smooth Fly", func: "flyKeybind • toggleFly()", what: "Activates 3D directional flight (LinearVelocity, flySpeed default 5) with hover locking and zero drift.", how: "Press R to take flight. Steer with camera and movement keys. Press R again to land." },
+  { key: "T", name: "Attack TP", func: "attackTpKeybind • toggleAttackTp()", what: "Instantly teleports behind selected target with synchronized offensive orientation.", how: "Lock target using C, then press T. You will instantly snap behind the enemy ready to strike." },
+  { key: "Y", name: "Auto TP", func: "autoTpKeybind • toggleAutoTp()", what: "Continuous tracking loop tethering you behind the opponent's back throughout combat exchanges.", how: "Lock target and press Y. Your character will automatically stick to their back." },
+  { key: "X", name: "Walk Fling", func: "walkFlingKeybind • WalkFling_toggle()", what: "Sets extreme angular velocity rotation (45,000 power, 90 variants), launching players upon physical contact.", how: "Press X and make contact with an opponent to instantly launch them into orbit." },
+  { key: "LeftCtrl", name: "Get Trash", func: "getTrashState.keybind • GetTrash_key()", what: "Scans map for interactive trash/props and brings them directly into player pickup range with Speed Return 153.", how: "Press Left-Ctrl to magnetize all surrounding throwable props directly to your hands." },
+  { key: "H", name: "Orbit", func: "orbitKeybind • Orbit_toggle()", what: "Rapid circumferential orbiting around locked target (40 implemented modes) to disorient enemy aim.", how: "Target player (C) and press H to initiate high-speed orbital flight around them." },
+  { key: "5", name: "View / Spectate", func: "viewKeybind • View_toggle()", what: "Switches local camera view directly to selected opponent's perspective.", how: "Select target with C and press 5. Press 5 again to restore local camera." },
+  { key: "6", name: "Direct Fling", func: "flingKeybind • syncFlingKeybindDisplay()", what: "Executes a single focused kinetic fling impulse directly into targeted enemy model.", how: "Lock target and press 6 to fire a targeted kinetic fling impulse directly at them." },
+  { key: "7", name: "Bring Wall Combo", func: "bringXKeybind • syncBringKeybindDisplay()", what: "Drags target into precise wall combo alignment with EMA ping compensation.", how: "Press 7 near any wall surface to pull the opponent directly into the rebound angle." },
+  { key: "F1", name: "Body Lock", func: "bodyLockKeybind • toggleBodyLock()", what: "Forces character torso facing direction directly at opponent (Target, Closest, CN, T/Close with Root, Head, Torso, Mouse).", how: "Press F1 to maintain continuous front-facing orientation toward target in melee combat." },
+  { key: "F2", name: "Physics TP", func: "tpPhysicsKeybind • togglePhysicsTP()", what: "Direct CFrame physics warping with instantaneous momentum dampening.", how: "Press F2 toward an obstacle or opponent to warp without geometry collision." },
+  { key: "~ (Tilde)", name: "TP Places", func: "kTog.Places • resolvePlaceCF(selectedPlace)", what: "Instantly warps character to chosen destination preset (Middle, Prison, Mountains, Atomic Base, etc.).", how: "1. Select destination in Places dropdown. 2. Press ~ (tilde) to warp to chosen location." },
+  { key: "Space", name: "No Stun Jump", func: "NothingXNoStunJump", what: "Forces client-side jump impulse to break free from stunlocks and emote freezes.", how: "Tap Space during enemy hit chains to force jump cancellation and break combos." }
 ];
 
-function renderKeybinds(lang){
+function renderKeybinds(){
   const tbody = document.getElementById('keybinds-body');
   if(!tbody) return;
   tbody.innerHTML = KEYBIND_ROWS.map(r => `
@@ -1943,119 +2062,110 @@ function renderKeybinds(lang){
       <td><span class="kb-key">${r.key}</span></td>
       <td><strong>${r.name}</strong></td>
       <td><code>${r.func}</code></td>
-      <td>${r.what[lang]}</td>
-      <td>${r.how[lang]}</td>
+      <td>${r.what}</td>
+      <td>${r.how}</td>
     </tr>
   `).join('');
 }
 
 let currentLang = 'en';
-
-function setLanguage(lang){
-  currentLang = lang === 'pl' ? 'pl' : 'en';
-  localStorage.setItem('hxh_lang', currentLang);
-
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if(I18N[currentLang] && I18N[currentLang][key]){
-      el.innerHTML = I18N[currentLang][key];
-    }
-  });
-
-  renderKeybinds(currentLang);
-
-  updateToggleDocsBtn();
-
-  document.getElementById('btn-lang-pl').classList.toggle('active', currentLang === 'pl');
-  document.getElementById('btn-lang-en').classList.toggle('active', currentLang === 'en');
-}
-
 let isDocsOpen = false;
 
 function updateToggleDocsBtn(){
   const btn = document.getElementById('toggle-docs-btn');
-  const btnText = document.getElementById('toggle-docs-text');
   const container = document.getElementById('docs-content');
-  const banner = document.getElementById('ai-banner');
-  if(!btn || !btnText || !container) return;
+  if(!btn || !container) return;
 
   if(isDocsOpen){
     container.classList.add('is-open');
-    btn.classList.add('is-active');
-    if(banner) banner.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    btnText.setAttribute('data-i18n', 'toggle_docs_hide');
-    btnText.textContent = I18N[currentLang].toggle_docs_hide;
+    btn.classList.add('is-open');
   } else {
     container.classList.remove('is-open');
-    btn.classList.remove('is-active');
-    if(banner) banner.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-    btnText.setAttribute('data-i18n', 'toggle_docs_show');
-    btnText.textContent = I18N[currentLang].toggle_docs_show;
+    btn.classList.remove('is-open');
   }
 }
 
-const toggleDocsBtn = document.getElementById('toggle-docs-btn');
-if(toggleDocsBtn){
-  toggleDocsBtn.addEventListener('click', () => {
-    isDocsOpen = !isDocsOpen;
+function initApp(){
+  var codeArea = document.getElementById('code-area');
+  if(codeArea){
+    codeArea.innerHTML = CODE.split('\n').map(tokLine).join('\n');
+  }
+
+  var copyBtn = document.getElementById('copy-btn');
+  if(copyBtn){
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(CODE).then(toast);
+    });
+  }
+
+  loadAvatar();
+  loadStatus();
+  setInterval(loadStatus, 3000);
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(I18N.en[key]) el.innerHTML = I18N.en[key];
+  });
+  renderKeybinds();
+
+  var toggleDocsBtn = document.getElementById('toggle-docs-btn');
+  if(toggleDocsBtn){
+    toggleDocsBtn.addEventListener('click', () => {
+      isDocsOpen = !isDocsOpen;
+      updateToggleDocsBtn();
+      if(isDocsOpen){
+        setTimeout(() => {
+          const el = document.getElementById('docs-content');
+          if(el){
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 50);
+      }
+    });
+  }
+
+  if(window.location.hash && window.location.hash.length > 1){
+    isDocsOpen = true;
     updateToggleDocsBtn();
-    if(isDocsOpen){
-      setTimeout(() => {
-        const el = document.getElementById('docs-content');
-        if(el){
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 50);
-    }
-  });
-}
-
-if(window.location.hash && window.location.hash.length > 1){
-  isDocsOpen = true;
-  updateToggleDocsBtn();
-}
-
-(function(){
-  const saved = localStorage.getItem('hxh_lang');
-  if(saved){
-    currentLang = saved;
-  } else {
-    const bLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-    currentLang = bLang.startsWith('pl') ? 'pl' : 'en';
   }
-  setLanguage(currentLang);
-})();
 
-const searchInput = document.getElementById('quickSearch');
-const filterBtns = document.querySelectorAll('.pill-btn');
-const searchableSections = document.querySelectorAll('.searchable-item');
+  var liveClockEl = document.getElementById('live-clock');
+  if(liveClockEl){
+    function updateClock(){
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      const ms = String(now.getMilliseconds()).padStart(3,'0');
+      liveClockEl.textContent = h + ':' + m + ':' + s + ':' + ms;
+    }
+    setInterval(updateClock, 47);
+    updateClock();
+  }
 
-function applyFilter(){
-  const query = searchInput.value.toLowerCase().trim();
-  const activeBtn = document.querySelector('.pill-btn.active');
-  const filterCat = activeBtn ? activeBtn.dataset.filter : 'all';
+  var filterBtns = document.querySelectorAll('.pill-btn');
+  var searchableSections = document.querySelectorAll('.searchable-item');
 
-  searchableSections.forEach(section => {
-    const cat = section.dataset.category;
-    const text = section.innerText.toLowerCase();
-    const matchesCat = (filterCat === 'all' || cat === filterCat);
-    const matchesQuery = (query === '' || text.includes(query));
+  function applyFilter(){
+    const activeBtn = document.querySelector('.pill-btn.active');
+    const filterCat = activeBtn ? activeBtn.dataset.filter : 'all';
 
-    section.style.display = (matchesCat && matchesQuery) ? 'flex' : 'none';
+    searchableSections.forEach(section => {
+      const cat = section.dataset.category;
+      const matchesCat = (filterCat === 'all' || cat === filterCat);
+      section.style.display = matchesCat ? 'flex' : 'none';
+    });
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter();
+    });
   });
 }
 
-searchInput.addEventListener('input', applyFilter);
-
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    applyFilter();
-  });
-});
 </script>
 </body>
 </html>
